@@ -18,3 +18,18 @@ def maxDifference(arr, n):
     return maxDiff
 
 print(maxDifference(n = 7, arr = [2, 3, 10, 2, 4, 8, 1]))
+
+# WORKING C++ CODE, TRANSALTION REMAINING
+# int maxDifference(int arr[], int n){
+#   int max_diff = -1;
+#   int mi = arr[0];
+#   for (int i=0;i<n;i++){
+#     if(arr[i]>mi){
+#       max_diff = max(max_diff, arr[i]-mi);
+#     }
+#     else{
+#       mi = arr[i];
+#     }
+#   }
+#   return max_diff;
+# }
