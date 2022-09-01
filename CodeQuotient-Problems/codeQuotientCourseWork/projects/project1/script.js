@@ -1,3 +1,4 @@
+//spellcheck
 var heading = document.getElementById("heading");
 var elements = document.getElementsByTagName("button");
 var button = document.getElementById("tadaaa");
