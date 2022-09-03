@@ -46,6 +46,7 @@ function fun(event){
     console.log("target", event.target);
     var element = document.createElement("button");//redundant
     var element = document.createElement("h1");
+    
     element.innerHTML = event.target.innerText;
     if (lastElement){
         div.removeChild(lastElement);
