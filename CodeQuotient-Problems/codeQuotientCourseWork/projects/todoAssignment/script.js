@@ -34,12 +34,17 @@ function addTasks(taskData, identifier){
     taskDeleteButton.innerText = "Delete";
     
 
-    newData.innerText = taskData[0];
+    if(identifier == undefined){
+        newData.innerText = taskData;
+    }else{
+
+        newData.innerText = taskData[0];
+    }
     if(taskData[1] == 1){
         newData.style.textDecoration = "line-through";
     }
     if(identifier == undefined){
-
+        
         tasks.push([taskData, status]);
     }
 
