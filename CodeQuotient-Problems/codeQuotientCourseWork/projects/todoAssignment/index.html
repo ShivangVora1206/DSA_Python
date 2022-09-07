@@ -3,23 +3,61 @@
         <title>TODO App js</title>
     </head>
     <body>
-        <input id="userinput" placeholder="add a task">
-        <button id="addTaskButton">ADD TASK</button>
-        <div id="output">
-        </div>
-        <style>
-            .todoContainer
-            {
-                background-color: blue;
-                color: azure;
-            }
 
-            .warning
-            {
+        <style>
+            .main{
+                min-height: 300;
+                background-color: rgb(239, 239, 239);
+            }
+            .sidebar{
+                min-height: 350;
+                background-color: rgb(211, 211, 211);
+
+            }
+            .warning{
                 border-color: red;
             }
-
+            table{
+                min-width: 350;
+                background-color: rgb(211, 211, 211);
+                border-spacing: 0;
+                
+            }
+            tr{
+                justify-content: flex-end;
+            }
+            td{
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid rgb(139, 139, 139);
+            }
+            ::placeholder{
+                font-family: Georgia, 'Times New Roman', Times, serif;
+                font-size: 50px;
+            }
+            input{
+                min-width: 300;
+                min-height: 100;
+            }
+            
+            
         </style>
+
+        <div class="flexbox-container" style="display:flex;">
+            <div class="sidebar" style="flex:1;">
+                <div id="taskarea">
+                    <label>TASK LIST</label>
+                    <table id="tasktable">
+
+                    </table>
+                </div>
+            </div>
+            <div class="main" style="flex:1;">
+                <div>
+                    <input id="taskinput" type="text" placeholder="I need to...">
+                </div>
+            </div>
+        </div>
         <script src="script.js"></script>
     </body>
 </html>

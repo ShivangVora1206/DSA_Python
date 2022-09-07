@@ -1,52 +1,74 @@
-var button = document.querySelector("#addTaskButton");
-var input = document.querySelector("#userinput");
-var output = document.querySelector("#output");
-var array = [];
-var todos = localStorage.getItem("todos");
-todos = JSON.parse(todos);
+var taskTable = document.querySelector("#tasktable")
+var taskInput = document.querySelector("#taskinput")
+var tasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
+if(tasks){
+    tasks.forEach(addTasks);
+}
 
+taskInput.addEventListener("keypress", function (event) {
+    if(event.key == "Enter"){
+        console.log("Enter on input area");
+        if (taskInput.value == ""){
+            taskInput.classList.add("warning");
+            return
+        }
 
-button.addEventListener("click", function (){
-
-    console.log(input.value);
-
-    if(!input.value){
-
-        input.classList.add("warning");
-
-        return
+        taskInput.classList.remove("warning");
+        addTasks(taskInput.value);
+        
     }
-
-    input.classList.remove("warning");
-
-    var listItem = document.createElement("div");
-    var listText = document.createElement("p");
-    var deleteButton = document.createElement("button");
-
-    deleteButton.innerText = "Delete";
-
-    deleteButton.addEventListener("click", function (event) {
-
-        output.removeChild(listItem);
-
-    })
-
-    listItem.setAttribute("class", "todoContainer");//removes previous styling and overwrites it
-    //listItem.className.add("todoContainer");//adds to the previously defined style instead of overwriting it
-    
-    listText.innerText = input.value;
-
-    array.push(input.value);
-
-    listItem.appendChild(listText);
-    listItem.appendChild(deleteButton);
-
-    output.appendChild(listItem);
-
-    localStorage.setItem("todos", JSON.stringify(array));
-
-    input.value = "";
-
 })
 
+
+function addTasks(taskData, identifier){
+    var status = 0;
+    var newRow = document.createElement("tr");
+    var newData = document.createElement("td");
+    var newData2 = document.createElement("td");
+    // var newData3 = document.createElement("td");
+    var taskCompleteButton = document.createElement("button");
+    var taskDeleteButton = document.createElement("button");
+
+    taskCompleteButton.innerText = "Completed";
+    taskDeleteButton.innerText = "Delete";
+    
+
+    newData.innerText = taskData[0];
+    if(taskData[1] == 1){
+        newData.style.textDecoration = "line-through";
+    }
+    if(identifier == undefined){
+
+        tasks.push([taskData, status]);
+    }
+
+    newData.style.paddingRight = "100px";
+    
+
+    taskCompleteButton.addEventListener("click", function () {
+
+        newData.style.textDecoration = "line-through";
+        index = tasks.indexOf(taskData);
+        tasks[index][1] = 1;
+        localStorage.setItem("tasks", JSON.stringify(tasks))
+        
+    })
+
+    taskDeleteButton.addEventListener("click", function () {
+        taskTable.removeChild(newRow);
+        index = tasks.indexOf(taskData);
+        tasks.splice(index, 1);
+        localStorage.setItem("tasks", JSON.stringify(tasks))
+    })
+
+    newData2.appendChild(taskCompleteButton);
+    newData2.appendChild(taskDeleteButton);
+    // newData3.appendChild(taskDeleteButton);
+    newRow.appendChild(newData);
+    newRow.appendChild(newData2);
+    // newRow.appendChild(newData3);
+    taskTable.appendChild(newRow);
+    localStorage.setItem("tasks", JSON.stringify(tasks))
+    taskInput.value = "";
+}
