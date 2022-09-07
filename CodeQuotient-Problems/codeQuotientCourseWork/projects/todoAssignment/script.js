@@ -40,6 +40,9 @@ function addTasks(taskData, identifier){
 
         newData.innerText = taskData[0];
     }
+
+    newData.classList.add("p");
+
     if(taskData[1] == 1){
         newData.style.textDecoration = "line-through";
     }
@@ -48,7 +51,7 @@ function addTasks(taskData, identifier){
         tasks.push([taskData, status]);
     }
 
-    newData.style.paddingRight = "100px";
+    // newData.style.paddingRight = "100px";
     
 
     taskCompleteButton.addEventListener("click", function () {
@@ -56,6 +59,7 @@ function addTasks(taskData, identifier){
         newData.style.textDecoration = "line-through";
         index = tasks.indexOf(taskData);
         tasks[index][1] = 1;
+        // why is this causing a bug??
         localStorage.setItem("tasks", JSON.stringify(tasks))
         
     })

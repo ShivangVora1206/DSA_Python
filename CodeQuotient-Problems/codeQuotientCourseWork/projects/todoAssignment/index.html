@@ -6,38 +6,68 @@
 
         <style>
             .main{
-                min-height: 300;
-                background-color: rgb(239, 239, 239);
+                min-height: 350;
+                background-color: rgb(255, 255, 255);
             }
             .sidebar{
                 min-height: 350;
-                background-color: rgb(211, 211, 211);
+                background-image: linear-gradient(to bottom, white, rgb(200, 200, 200));
+                /* background-color: rgb(211, 211, 211); */
 
             }
             .warning{
                 border-color: red;
             }
             table{
-                min-width: 350;
-                background-color: rgb(211, 211, 211);
-                border-spacing: 0;
+                min-width: 350px;
+                width: 100%;
                 
+                /* background-color: rgb(231, 252, 111); */
+                border-spacing: 0;
             }
-            tr{
-                justify-content: flex-end;
-            }
+            
             td{
-                padding: 10px;
+                /* padding: 10px; */
+                padding-bottom: 10px;
+                padding-top: 10px;
                 text-align: left;
-                border-bottom: 1px solid rgb(139, 139, 139);
+                border-bottom: 1px solid rgb(101, 101, 101);
             }
-            ::placeholder{
-                font-family: Georgia, 'Times New Roman', Times, serif;
-                font-size: 50px;
+            td:first-child {
+                padding-left: 10px;
+                /* padding-right: 60%; */
+            }
+
+            td:last-child {
+                text-align: right;
+                padding-right: 10px;
+                /* padding-left: 40%; */
             }
             input{
-                min-width: 300;
-                min-height: 100;
+                text-align: left;
+                
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+                font-size: 50px;
+                width: 100%;
+                min-height: 50px;
+                border-color: white;
+                
+
+            }
+            label{
+                font-size: 50;
+                font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+            }
+            p{
+                font-size: large;
+                padding: 5px;
+                padding-top: 0px;
+            }
+            .p{
+                font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+                font-size: large;
+                padding: 5px;
+                padding-top: 0px;
             }
             
             
@@ -47,6 +77,7 @@
             <div class="sidebar" style="flex:1;">
                 <div id="taskarea">
                     <label>TASK LIST</label>
+                    <p>Add tasks to your list by typing in the input box and pressing enter.</p>
                     <table id="tasktable">
 
                     </table>
