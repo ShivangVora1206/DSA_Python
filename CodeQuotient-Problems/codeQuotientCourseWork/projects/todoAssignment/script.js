@@ -32,9 +32,11 @@ function addTasks(taskData, identifier){
     var newData2 = document.createElement("td");
     var taskCompleteButton = document.createElement("button");
     var taskDeleteButton = document.createElement("button");
+    var taskUpdateButton = document.createElement("button");
 
     taskCompleteButton.innerText = "Completed";
     taskDeleteButton.innerText = "Delete";
+    taskUpdateButton.innerText = "Edit";
 
         newData.innerText = taskData[0];
 
@@ -67,7 +69,16 @@ function addTasks(taskData, identifier){
         localStorage.setItem("tasks", JSON.stringify(tasks))
     })
 
+    taskUpdateButton.addEventListener("click", function () {
+        var updateData = prompt("Change the task");
+        newData.innerText = updateData;
+        let index = tasks.indexOf(taskData);
+        tasks[index][0] = updateData;
+        localStorage.setItem("tasks", JSON.stringify(tasks))
+    })
+
     newData2.appendChild(taskCompleteButton);
+    newData2.appendChild(taskUpdateButton);
     newData2.appendChild(taskDeleteButton);
     newRow.appendChild(newData);
     newRow.appendChild(newData2);
