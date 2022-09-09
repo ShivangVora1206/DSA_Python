@@ -2,19 +2,24 @@
 
 <html>
     <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <title>TODO App js</title>
     </head>
     <body>
 
         <style>
+            body {
+                background-color: #3c3c3c;
+            }
             .main{
-                min-height: 350;
-                background-color: rgb(255, 255, 255);
+                min-height: 745px;
+                background-image: linear-gradient(to bottom, rgb(0, 0, 0), rgb(38, 0, 69));
+                /* background-color: rgb(0, 0, 0); */
             }
             .sidebar{
-                height: 100%;
-                background-image: linear-gradient(to bottom, white, rgb(99, 202, 254));
-                /* background-color: rgb(211, 211, 211); */
+                min-height: 745px;
+                background-image: linear-gradient(to bottom, rgb(0, 0, 0), rgb(38, 0, 69));
+                /* background-color: rgb(0, 0, 0); */
 
             }
             .warning{
@@ -30,8 +35,8 @@
             
             td{
                 /* padding: 10px; */
-                padding-bottom: 10px;
-                padding-top: 10px;
+                padding-bottom: 15px;
+                padding-top: 15px;
                 text-align: left;
                 border-bottom: 1px solid rgb(101, 101, 101);
             }
@@ -46,26 +51,34 @@
                 /* padding-left: 40%; */
             }
             input{
+                padding-left: 10px;
                 text-align: left;
-                
                 font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
                 font-size: 50px;
-                width: 100%;
+                width: 90%;
                 min-height: 50px;
                 border-radius: 5px;
-                border-color: aqua;
+                border-color: rgb(61, 1, 111);
 
             }
+            #inputbox{
+                padding-left: 30px;
+                padding-top: 5px;
+            }
             label{
+                padding-left: 10px;
+                color: white;
                 font-size: 50;
                 font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             }
             p{
+                color: white;
                 font-size: large;
                 padding: 5px;
                 padding-top: 0px;
             }
             .p{
+                color: white;
                 font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
                 font-size: large;
                 padding: 5px;
@@ -87,6 +100,9 @@
             </div>
             <div class="main" style="flex:1;">
                 <div>
+                    <label style="padding-left: 30px;">TASK INPUT</label>
+                </div>
+                <div id="inputbox">
                     <input id="taskinput" type="text" placeholder="I need to...">
                 </div>
             </div>

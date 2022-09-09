@@ -11,6 +11,7 @@ if(tasks){
 taskInput.addEventListener("keypress", function (event) {
     if(event.key == "Enter"){
         if (taskInput.value == ""){
+            alert("Please enter a valid task");
             taskInput.classList.add("warning");
             return
         }
@@ -30,15 +31,26 @@ function addTasks(taskData, identifier){
     var newRow = document.createElement("tr");
     var newData = document.createElement("td");
     var newData2 = document.createElement("td");
+    
     var taskCompleteButton = document.createElement("button");
     var taskDeleteButton = document.createElement("button");
     var taskUpdateButton = document.createElement("button");
 
-    taskCompleteButton.innerText = "Completed";
-    taskDeleteButton.innerText = "Delete";
-    taskUpdateButton.innerText = "Edit";
+    // taskCompleteButton.innerText = "Completed";
+    // taskDeleteButton.innerText = "Delete";
+    // taskUpdateButton.innerText = "Update";
 
-        newData.innerText = taskData[0];
+    taskCompleteButton.className = "btn";
+    taskDeleteButton.className = "btn";
+    taskUpdateButton.className = "btn";
+
+    taskCompleteButton.innerHTML = "<i class=\"fa fa-check\"></i>";
+    taskDeleteButton.innerHTML = "<i class=\"fa fa-trash\"></i>";
+    taskUpdateButton.innerHTML = "<i class=\"fa fa-gears\"></i>";
+
+    
+
+    newData.innerText = taskData[0];
 
     newData.classList.add("p");
 
