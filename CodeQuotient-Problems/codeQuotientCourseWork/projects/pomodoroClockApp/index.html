@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>Pomodoro Clock</title>
+    </head>
+    <body>
+        <style>
+            .container{
+                align-self: center;
+                background-color: rgb(0, 0, 0, 0.6);
+                width: 220px;
+                height: 460px;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+                border-radius: 6px;
+            }
+            body{
+                background-image: linear-gradient(to top right, rgb(255, 149, 84), rgb(250, 202, 135));
+            }
+            #upper{
+                height: 50%;
+                top: 0;
+                padding: 15;
+            }
+            #lower{
+                border-radius: 6px;
+                height: 50%;
+                bottom: 0;
+                padding: 15;
+            }
+            #progressbox{
+                height: 80%;
+                background-color: rgb(255, 255, 255);
+            }
+            #sessionlabel{
+                color: aliceblue;
+                padding-top: 10;
+                font-size: 30;
+                text-align: center;
+            }
+
+        </style>
+        <div class="container" id="container">
+            <div id="upper">
+                <div id="progressbox"></div>
+                <div id="sessionlabel">Session 1</div>
+            </div>
+            <div id = "lower">
+                <div id="controls"></div>
+            </div>
+        </div>
+        <script src="script.js"></script>
+    </body>
+</html>
