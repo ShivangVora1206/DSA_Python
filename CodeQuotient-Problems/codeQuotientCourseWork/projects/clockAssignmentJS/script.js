@@ -35,7 +35,7 @@ function secondChanger() {
         minutes.innerHTML = `0${mm}`;
         hours.innerHTML = `0${hh}`;
     }
-    if(hh > 59){
+    if(hh > 24){
         clearInterval(myInterval);
     }
 }
