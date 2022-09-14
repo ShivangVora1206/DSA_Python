@@ -11,11 +11,15 @@ var progressMinutes = document.querySelector("#progressminutes");
 var progressSeconds = document.querySelector("#progressseconds")
 var isStart = false;
 var isPause = false;
+
 let arr = [0, 0];
+
 sessionTimePlusButton.addEventListener("click", incrementTimer);
 breakTimePlusButton.addEventListener("click", incrementTimer);
+
 sessionTimeMinusButton.addEventListener("click", decrementTimer);
 breakTimeMinusButton.addEventListener("click", decrementTimer);
+
 startButton.addEventListener("click", pomodoroLogic);
 resetButton.addEventListener("click", pomodoroLogic);
 
@@ -69,21 +73,32 @@ function pomodoroLogic(event) {
         clearInterval(interval1);
         isStart = false;
         isPause = false;
-        startButton.innerHTML = "start";
+        startButton.innerHTML = "Start";
+        sessionTimeMinusButton.removeAttribute("disabled");
+        sessionTimePlusButton.removeAttribute("disabled");
+        breakTimeMinusButton.removeAttribute("disabled");
+        breakTimePlusButton.removeAttribute("disabled");
         return
     }
     if(event.target.id === "startbutton" && isStart){
         isStart = false;
         isPause = true;
-        startButton.innerHTML = "start";
+        startButton.innerHTML = "Start";
         console.log("is paused", sessionSeconds, breakSeconds, arr);
         clearInterval(interval1);
     }
     else{
         isStart = true;
-        startButton.innerHTML = "pause";
+        startButton.innerHTML = "Pause";
         interval1 = setInterval(progressDecrementer, 100);
     }
+    if(isStart || isPause){
+        sessionTimeMinusButton.setAttribute("disabled", "True");
+        sessionTimePlusButton.setAttribute("disabled", "True");
+        breakTimeMinusButton.setAttribute("disabled", "True");
+        breakTimePlusButton.setAttribute("disabled", "True");
+    }
+
 
     
     function progressDecrementer() {
@@ -95,6 +110,9 @@ function pomodoroLogic(event) {
         if(!isSessionOver){
             progressBox.classList.remove("bordercolororange");
             progressBox.classList.add("bordercolorblue");
+            progressMinutes.classList.remove("bordercolororange");
+            progressMinutes.classList.add("bordercolorblue");
+
             if(parseInt(sessionSeconds/60) < 10){
 
                 progressMinutes.innerHTML = "0"+parseInt(sessionSeconds/60);
@@ -123,6 +141,8 @@ function pomodoroLogic(event) {
         if(isSessionOver){
             progressBox.classList.remove("bordercolorblue");
             progressBox.classList.add("bordercolororange");
+            progressMinutes.classList.remove("bordercolorblue");
+            progressMinutes.classList.add("bordercolororange");
             if(parseInt(breakSeconds/60) < 10){
 
                 progressMinutes.innerHTML = "0"+parseInt(breakSeconds/60);
