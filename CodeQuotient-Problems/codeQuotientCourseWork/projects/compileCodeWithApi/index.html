@@ -3,31 +3,74 @@
 <head>
     <title>Compile Code With API</title>
 </head>
-
 <body>
-    <div>
-        <textarea id="code"></textarea>
-        <!-- <form> --><br>
-        <label> Select Languages </label>
-        <select id="dropdown">
-            <option value="0"> Python
-            </option>
-            <option value="7"> C
-            </option>
-            <option value="77"> C++
-            </option>
-            <option value="4"> JavaScript
-            </option>
-            <option value="8"> Java
-            </option>
-        </select>
-        <!-- </form> -->
-    </div>
-    <div>
-        <button id="compilebutton">COMPILE</button>
-    </div>
-    <div>
-        <p id="output"></p>
+    <style>
+        body{
+            /* background-image: radial-gradient(rgb(247, 247, 247),rgb(57, 211, 253), rgb(10, 0, 66)); */
+            background-color: rgb(255, 255, 255);
+        }
+        #code{
+            height: 50%;
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        #languagediv{
+            padding: 10px;
+            float: right;
+        }
+        #basediv{
+            width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            /* background-color: cadetblue; */
+        }
+        #outputdiv{
+            background-color: rgb(218, 218, 218);
+            height: 38%;
+            width: 100%;
+            border-radius: 5px;
+
+        }
+        #output{
+            color: rgb(0, 0, 0);
+            padding: 10px;
+        }
+        #compilebutton{
+            color: rgb(0, 0, 0);
+            background-color: rgb(255, 183, 0);
+            padding: 10px;
+            border-radius: 5px;
+            border-width: 0px;
+        }
+
+    </style>
+    <div id="basediv">
+        <div id="languagediv">
+            <label> Select Languages </label>
+            <select id="dropdown">
+                <option value="0"> Python
+                </option>
+                <option value="7"> C
+                </option>
+                <option value="77"> C++
+                </option>
+                <option value="4"> JavaScript
+                </option>
+                <option value="8"> Java
+                </option>
+            </select>
+        </div>
+        <div id="codediv">
+            <textarea id="code"></textarea>
+        </div>
+        <div id="compilebuttondiv">
+            <button id="compilebutton">COMPILE</button>
+        </div>
+        <div id="outputdiv">
+            <p id="output">output</p>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
