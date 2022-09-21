@@ -1,3 +1,4 @@
+<!-- project link https://projects.codequotient.com/project/compilecodeusingapi-3p34g82fr89l88mgz8o -->
 <html>
 
 <head>
@@ -47,6 +48,8 @@
         }
         #compilebutton{
             font-weight: 600;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
             color: rgb(0, 0, 0);
             background-color: rgb(255, 183, 0);
             padding: 10px;
@@ -65,13 +68,20 @@
             font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
             font-size: 50;
         }
+        select{
+            border-radius: 5px;
+            padding: 3px;
+            margin-left: 5px;
+            font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+
+        }
 
     </style>
     <h1><span>COMPILER</span> <span style="color:rgb(255, 183, 0);">API</span></h1>
     <div id="basediv">
         <div id="leftside">
             <div id="languagediv">
-                <label> Select Languages </label>
+                <label style="font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;"> Select Languages </label>
                     <select id="dropdown">
                         <option value="0"> Python
                         </option>
@@ -86,7 +96,7 @@
                     </select>
             </div>
             <div id="compilebuttondiv">
-                <button id="compilebutton">COMPILE</button>
+                <button id="compilebutton">RUN</button>
             </div>
             <div id="codediv">
                 <textarea id="code"></textarea>

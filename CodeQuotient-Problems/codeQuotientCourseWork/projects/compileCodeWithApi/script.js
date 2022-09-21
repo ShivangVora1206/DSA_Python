@@ -1,3 +1,4 @@
+//project link https://projects.codequotient.com/project/compilecodeusingapi-3p34g82fr89l88mgz8o
 var url = "https://codequotient.com/api/";
 var codeText = document.querySelector("#code");
 var compileButton = document.querySelector("#compilebutton");
@@ -6,6 +7,7 @@ var dropdown = document.querySelector("#dropdown");
 
 
 compileButton.addEventListener("click", function () {
+    compileButton.innerHTML = "RUNNING";
     var request = new XMLHttpRequest();
     var data = {
         "code": codeText.value,
@@ -20,8 +22,8 @@ compileButton.addEventListener("click", function () {
         let response = JSON.parse(request.responseText);
         if (response.error !== undefined) {
 
-            // console.log("error code is null");
-            outputArea.innerHTML = "";
+            compileButton.innerHTML = "RUN";
+            outputArea.innerHTML = "Please Write Some Code";
 
         }
         else {
@@ -38,6 +40,7 @@ compileButton.addEventListener("click", function () {
                     if (responseData.status === undefined) {
                         clearInterval(interval);
                         // console.log(responseData);
+                        compileButton.innerHTML = "RUN";
                         if (responseData.output === "") {
                             outputArea.innerText = responseData.errors;
                         } else {
