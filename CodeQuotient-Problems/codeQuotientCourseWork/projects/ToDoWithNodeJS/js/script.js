@@ -35,7 +35,6 @@ function addTasks(taskData, identifier){
     if (taskData === undefined){return}
     var status = 0;
     if(typeof taskData === "string"){
-        // taskData = [taskData, status];
         taskData = {data : taskData, status : 0};
     }
     var newRow = document.createElement("tr");
@@ -45,10 +44,6 @@ function addTasks(taskData, identifier){
     var taskCompleteButton = document.createElement("button");
     var taskDeleteButton = document.createElement("button");
     var taskUpdateButton = document.createElement("button");
-
-    // taskCompleteButton.innerText = "Completed";
-    // taskDeleteButton.innerText = "Delete";
-    // taskUpdateButton.innerText = "Update";
 
     taskCompleteButton.className = "btn";
     taskDeleteButton.className = "btn";
