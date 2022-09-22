@@ -1,10 +1,23 @@
 const http = require("http");
 const fs = require("fs");
+
 let todos = [];
+
+fs.readFile("database.json", "utf-8", function (err, data) {
+    if(err){
+        response.end("error reading todos from database");
+    }
+    else{
+        todos = JSON.parse(data);
+    }
+});
+
 function requestHandler(request, response) {
+    
     const path = request.url;
+    
     const method = request.method;
-    console.log(path);
+        
     if(path === "/"){
         fs.readFile("./html/index.html", "utf-8", function (err, data) {
             if(err){
@@ -45,6 +58,7 @@ function requestHandler(request, response) {
             }
             else{
                 todos.push(data.task);
+                storeTodos(todos);
             }
         })
     }
@@ -64,6 +78,7 @@ function requestHandler(request, response) {
                         break;
                     }
                 }
+                storeTodos(todos);
                 response.end();
             }
         })
@@ -81,6 +96,7 @@ function requestHandler(request, response) {
                         break;
                     }
                 }
+                storeTodos(todos);
                 response.end();
             }
         })
@@ -98,10 +114,21 @@ function requestHandler(request, response) {
                         break;
                     }
                 }
+                storeTodos(todos);
                 response.end();
             }
         })
     }
+}
+
+function storeTodos(array) {
+    fs.writeFile("database.json", JSON.stringify(array), function (err){
+        if(err){
+            console.log("error while writing data");
+        }else{
+            console.log("todos written successfully");
+        }
+    });
 }
 
 const startServer = http.createServer(requestHandler);
