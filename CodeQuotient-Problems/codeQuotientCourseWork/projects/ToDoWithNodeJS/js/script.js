@@ -12,9 +12,6 @@ function getAllTodosFromServer(){
     });
 }
 
-// if(tasks){
-//     tasks.forEach(addTasks);
-// }
 
 taskInput.addEventListener("keypress", function (event) {
     if(event.key == "Enter"){
@@ -33,7 +30,6 @@ taskInput.addEventListener("keypress", function (event) {
 
 function addTasks(taskData, identifier){
     if (taskData === undefined){return}
-    var status = 0;
     if(typeof taskData === "string"){
         taskData = {data : taskData, status : 0};
     }
@@ -69,11 +65,7 @@ function addTasks(taskData, identifier){
         let postData = {"task" : taskData};
         request.setRequestHeader("Content-Type", "application/json");
         request.send(JSON.stringify(postData));
-        // tasks.push(taskData);
     }
-
-    // newData.style.paddingRight = "100px";
-    
 
     taskCompleteButton.addEventListener("click", function () {
 
@@ -83,11 +75,7 @@ function addTasks(taskData, identifier){
         request.open("POST", "http://127.0.0.1:8000/updateTodoState");
         let postData = {"task" : taskData};
         request.setRequestHeader("Content-Type", "application/json");
-        request.send(JSON.stringify(postData));
-        // let index = tasks.indexOf(taskData);
-        // tasks[index][1] = 1;
-        // localStorage.setItem("tasks", JSON.stringify(tasks))
-        
+        request.send(JSON.stringify(postData));        
     })
 
     taskDeleteButton.addEventListener("click", function () {
@@ -98,9 +86,6 @@ function addTasks(taskData, identifier){
         let postData = {"task" : taskData};
         request.setRequestHeader("Content-Type", "application/json");
         request.send(JSON.stringify(postData));
-        // let index = tasks.indexOf(taskData);
-        // tasks.splice(index, 1);
-        // localStorage.setItem("tasks", JSON.stringify(tasks))
     })
 
     taskUpdateButton.addEventListener("click", function () {
@@ -112,9 +97,6 @@ function addTasks(taskData, identifier){
         let postData = {oldTask : taskData, newTask : updateData};
         request.setRequestHeader("Content-Type", "application/json");
         request.send(JSON.stringify(postData));
-        // let index = tasks.indexOf(taskData);
-        // tasks[index][0] = updateData;
-        // localStorage.setItem("tasks", JSON.stringify(tasks))
     })
 
     newData2.appendChild(taskCompleteButton);
@@ -123,6 +105,5 @@ function addTasks(taskData, identifier){
     newRow.appendChild(newData);
     newRow.appendChild(newData2);
     taskTable.appendChild(newRow);
-    // localStorage.setItem("tasks", JSON.stringify(tasks))
     taskInput.value = "";
 }
