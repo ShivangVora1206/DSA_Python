@@ -1,0 +1,115 @@
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+	font-family: 'Segoe UI', sans-serif;
+}
+
+nav {
+	width: 100vw;
+	height: 50px;
+	background-color: rgb(2, 48, 71);
+}
+header {
+	width: 90vw;
+	display: flex;
+	justify-content: space-between;
+	margin: 0 auto;
+	line-height: 50px;
+	font-size: 1.5rem;
+}
+header a {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	color: white;
+	text-decoration: none;
+	font-weight: bold;
+	font-size: 1.7rem;
+}
+
+.login-container button {
+	width: 70px;
+	background-color: #f4ee07;
+	padding: 0.5rem;
+	border-radius: 5px;
+	color: black;
+	border: 0px;
+	cursor: pointer;
+	font-family: 'Segoe UI', sans-serif;
+	font-weight: 500;
+	font-size: 1rem;
+}
+main {
+	display: flex;
+	flex-direction: column;
+}
+#restaurant-details {
+	background-image: linear-gradient(to top, #30cfd0 0%, #056b9d 100%);
+	color: white;
+	height: 30vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+#menu-images-section {
+	background-image: linear-gradient(to top, #a8edea 0%, #fed6e3 100%);
+	height: 50vh;
+}
+
+#menu-details-section {
+	background-color: yellow;
+	height: 15vh;
+}
+
+.row-restaurant-details {
+	display: flex;
+	justify-content: space-around;
+}
+.menu-details {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	height: 100%;
+}
+.menu-details h1 {
+	width: 30%;
+	display: flex;
+	justify-content: center;
+}
+.menu-details p {
+	display: flex;
+	align-items: center;
+	border-left: 2px solid black;
+	height: 90%;
+	font-size: 1.2rem;
+	padding-left: 30px;
+	color: rgb(30, 30, 30);
+}
+.image-div img {
+	margin: 10px;
+	width: 100%;
+	height: 250px;
+	object-fit: cover;
+	transition: 0.2s all;
+}
+.image-div img:hover {
+	filter: brightness(0.8);
+	scale: 0.9;
+}
+.image-div {
+	display: flex;
+	justify-content: space-around;
+	padding-top: 1rem;
+}
+dt {
+	font-size: 1.4rem;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+dd {
+	margin-bottom: 10px;
+	text-transform: capitalize;
+}
+dl {
+	border-left: 2px solid rgb(255, 255, 255);
+	padding-left: 1.5rem;
+}

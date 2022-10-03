@@ -1,0 +1,109 @@
+* {
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+body {
+	background-color: #ffdee9;
+	background-image: linear-gradient(0deg, #ffdee9 0%, #b5fffc 100%);
+	height: 100vh;
+}
+#signUp-main {
+	display: flex;
+	flex-direction: column;
+	width: 40%;
+	margin: 50px auto;
+}
+label {
+	font-family: 'Segoe UI', sans-serif;
+	margin-top: 10px;
+	font-weight: bold;
+	color: rgb(1, 122, 122);
+}
+#signUp-main input {
+	width: 100%;
+	padding: 0.7rem;
+	border-radius: 10px;
+	border: 0px;
+	background: rgba(97, 244, 224, 0.7);
+}
+#signUpBtn {
+	width: 200px;
+	background-color: rgb(1, 122, 122);
+	padding: 0.7rem;
+	border-radius: 20px;
+	border: 0px;
+	margin: 20px auto;
+	color: white;
+	font-size: 1rem;
+	cursor: pointer;
+}
+#signUp-main h1 {
+	font-family: 'Segoe UI', sans-serif;
+}
+#bottom-links-signed {
+	display: flex;
+	/* flex-direction: column; */
+	justify-content: space-around;
+}
+#bottom-links-signed p {
+	font-size: 1.2rem;
+}
+a {
+	font-family: 'Segoe UI', sans-serif;
+	text-decoration: none;
+	/* width: 100px; */
+	color: #1370d5;
+	font-size: 1.2rem;
+	font-weight: 500;
+}
+.bottom-links {
+	display: flex;
+	justify-content: space-between;
+}
+.bottom-links span {
+	font-size: 1.4rem;
+	font-family: 'Segoe UI', sans-serif;
+}
+
+/* loader */
+.lds-facebook {
+	display: inline-block;
+	position: relative;
+	top: -20px;
+	left: 25px;
+	width: 200px;
+	height: 10px;
+	scale: 0.6;
+}
+.lds-facebook div {
+	display: inline-block;
+	position: absolute;
+	left: 8px;
+	width: 16px;
+	background: #fff;
+	animation: lds-facebook 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.lds-facebook div:nth-child(1) {
+	left: 8px;
+	animation-delay: -0.24s;
+}
+.lds-facebook div:nth-child(2) {
+	left: 32px;
+	animation-delay: -0.12s;
+}
+.lds-facebook div:nth-child(3) {
+	left: 56px;
+	animation-delay: 0;
+}
+@keyframes lds-facebook {
+	0% {
+		top: 8px;
+		height: 64px;
+	}
+	50%,
+	100% {
+		top: 24px;
+		height: 32px;
+	}
+}
