@@ -43,7 +43,7 @@ app.post("/updateTodoState", (request, response) => {
         let newTodo = request.body;
         console.log(newTodo);
         for(let i=0; i < todos.length; i++){
-            if(todos[i].task.data === newTodo.task.data){
+            if(todos[i].taskId === newTodo.taskId){
                 todos[i] = newTodo;
                 break
             }
@@ -66,7 +66,7 @@ app.post("/deleteTodo", (request, response) => {
         let newTodo = request.body;
         console.log(newTodo);
         for(let i=0; i < todos.length; i++){
-            if(todos[i].task.data === newTodo.task.data){
+            if(todos[i].taskId === newTodo.taskId){
                 todos.splice(i, 1);
                 break
             }
@@ -88,7 +88,7 @@ app.post("/updateTodoValue", (request, response) => {
         console.log(todos);
         let requestBody = request.body;
         for(let i=0; i < todos.length; i++){
-            if(todos[i].task.data === requestBody.oldTask.task.data){
+            if(todos[i].taskId === requestBody.oldTask.taskId){
                 todos[i].task.data = requestBody.newTask;
                 break
             }

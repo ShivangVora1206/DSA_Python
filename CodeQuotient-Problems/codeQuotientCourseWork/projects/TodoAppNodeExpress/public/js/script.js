@@ -13,6 +13,15 @@ function getAllTodosFromServer(){
     });
 }
 
+function createTaskId(data){
+    let temp = String(data);
+    let sum = "";
+    for(let i=0;i<temp.length;i++){
+        sum += temp.charCodeAt(i);
+    }
+    console.log(sum);
+    return String(parseInt(parseInt(sum)/3.14)).slice(0, 6);
+}
 
 taskInput.addEventListener("keypress", function (event) {
     if(event.key == "Enter"){
@@ -23,7 +32,12 @@ taskInput.addEventListener("keypress", function (event) {
         }
 
         taskInput.classList.remove("warning");
-        addTasks({"task":{"data":taskInput.value, "status":0}}, "button");
+        addTasks({
+                    "task":{
+                            "data":taskInput.value, "status":0
+                            },
+                    "taskId":createTaskId(taskInput.value)
+                }, "button");
         
     }
 })
