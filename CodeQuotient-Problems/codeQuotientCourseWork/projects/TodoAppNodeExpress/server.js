@@ -1,14 +1,108 @@
 const express = require("express");
 const fs = require("fs");
+const session = require("express-session")
 const app = express();
 let todos = [];
+
 app.use(express.static("public"));
 app.use(express.json());
+app.use(express.urlencoded({extended:true}))
+
+
+app.use(session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } 
+    }))
 
 app.get("/", (request, response) => {
-    response.sendFile(__dirname+"/public/html/index.html");
+    if(request.session.isLoggedIn){
+        response.sendFile(__dirname+"/public/html/index.html");
+    }else{
+        response.redirect("/login");
+    }
 });
 
+
+
+app.route("/login").get(function(request, response)
+{
+    if(request.session.isLoggedIn){
+        response.redirect("/");
+    }else{
+        response.sendFile(__dirname+"/public/html/login.html")
+    }
+})
+.post(function(request, response)
+{
+	getUser(function( users )
+	{
+		const user = users.filter(function(user)
+		{
+			if( user.username === request.body.username && user.password === request.body.password )
+			{
+				return true
+			}
+		})
+
+		if(user.length)
+		{
+			request.session.isLoggedIn = true;
+			response.redirect("/")
+		}
+		else
+		{
+			response.end("login failed");
+
+		}
+	});
+
+});
+
+
+
+app.get("/signup", (request, response) =>{
+    if(request.session.isSignedUp){
+        response.redirect("/login");
+    }else{
+        response.sendFile(__dirname+"/public/html/signup.html");
+    }
+})
+.post("/signup", (request, response) => {
+    saveUser(request.body, (err)=>{
+        if(err){
+            response.end("signup failed");
+        }else{
+            request.session.isSignedUp = true;
+            response.redirect("/login");
+        }
+    })
+})
+
+function saveUser(user, callback)
+{
+	getUser(function(users)
+	{
+		users.push(user);
+
+		fs.writeFile("credentials.json", JSON.stringify(users), function()
+		{
+			callback();
+		});
+	})
+}
+
+function getUser(callback)
+{
+	fs.readFile("credentials.json", "utf-8", function(err, data)
+	{
+		if(data)
+		{
+			callback(JSON.parse(data));
+		}
+	})
+}
 app.get("/readTodo", (request, response) => {
     getDataFromFile((err, data)=>{
         if(err){
