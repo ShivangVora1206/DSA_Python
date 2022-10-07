@@ -1,8 +1,22 @@
-var taskTable = document.querySelector("#tasktable")
-var taskInput = document.querySelector("#taskinput")
+var taskTable = document.querySelector("#tasktable");
+var taskInput = document.querySelector("#taskinput");
+var userNameVar = document.querySelector("#userNameVar");
 var tasks = getAllTodosFromServer();
 
+function getUserName() {
+    let req = new XMLHttpRequest();
+    req.open("get", "http://127.0.0.1:3000/getusername");
+    req.send();
+    req.addEventListener("load", ()=>{
+        console.log("uname", req.responseText);
+        userNameVar.innerHTML = req.responseText;
+    })
+}
+
+getUserName();
+
 function getAllTodosFromServer(){
+    // getUserName();
     let request = new XMLHttpRequest();
     request.open("GET", "http://127.0.0.1:3000/readTodo");
     request.send();

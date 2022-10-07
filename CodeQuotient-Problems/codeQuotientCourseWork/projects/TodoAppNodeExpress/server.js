@@ -1,20 +1,44 @@
 const express = require("express");
 const fs = require("fs");
-const session = require("express-session")
+const session = require("express-session");
+const { request } = require("http");
 const app = express();
 let todos = [];
 
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
-
-
 app.use(session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false } 
     }))
+
+
+app.get("/logout", (request, response)=>{
+    request.session.destroy((err)=>{
+        if(err){
+            console.log("error destroying a session");
+        }else{
+
+            response.redirect("/signup");
+        }
+    });
+})
+
+app.get("/getusername", (request, response)=>{
+    console.log(request.session);
+    response.json(request.session.username);
+})
+
+app.get("/invalidlogin", (request, response)=>{
+    response.sendFile(__dirname+"/public/html/invalidlogin.html");
+})
+
+app.get("/invalidsignup", (request, response)=>{
+    response.sendFile(__dirname+"/public/html/invalidsignup.html");
+})
 
 app.get("/", (request, response) => {
     if(request.session.isLoggedIn){
@@ -48,12 +72,14 @@ app.route("/login").get(function(request, response)
 
 		if(user.length)
 		{
+            request.session.username = request.body.username;
 			request.session.isLoggedIn = true;
+            console.log(request.session);
 			response.redirect("/")
 		}
 		else
 		{
-			response.end("login failed");
+			response.redirect("/invalidLogin");
 
 		}
 	});
@@ -72,7 +98,7 @@ app.get("/signup", (request, response) =>{
 .post("/signup", (request, response) => {
     saveUser(request.body, (err)=>{
         if(err){
-            response.end("signup failed");
+            response.redirect("/invalidsignup");
         }else{
             request.session.isSignedUp = true;
             response.redirect("/login");
@@ -83,8 +109,18 @@ app.get("/signup", (request, response) =>{
 function saveUser(user, callback)
 {
 	getUser(function(users)
-	{
-		users.push(user);
+	{   var temp = users.filter((value)=>{
+        if(value.username === user.username){
+            return true;
+        }
+    })
+        if(temp.length){
+            callback(true);
+            return
+        }else{
+
+            users.push(user);
+        }
 
 		fs.writeFile("credentials.json", JSON.stringify(users), function()
 		{
