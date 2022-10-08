@@ -9,7 +9,7 @@ function getUserName() {
     req.send();
     req.addEventListener("load", ()=>{
         console.log("uname", req.responseText);
-        userNameVar.innerHTML = req.responseText;
+        userNameVar.innerHTML = JSON.parse(req.responseText);
     })
 }
 
