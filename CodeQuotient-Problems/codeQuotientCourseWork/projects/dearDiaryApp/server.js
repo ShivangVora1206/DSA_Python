@@ -1,7 +1,6 @@
 const express = require("express");
 const session = require("express-session");
 const fs = require("fs");
-const { call } = require("function-bind");
 app = express();
 
 app.use(express.static("public"));
@@ -90,7 +89,12 @@ app.get("/login", (request, response)=>{
 })
 
 app.get("/signup", (request, response)=>{
-    response.sendFile(__dirname+"/public/html/signup.html");
+    if(request.session.isLoggedin){
+        response.redirect("/");
+    }else{
+
+        response.sendFile(__dirname+"/public/html/signup.html");
+    }
 })
 
 app.post("/signup", (request, response)=>{
@@ -108,17 +112,33 @@ app.post("/signup", (request, response)=>{
     })
 })
 
+app.get("/loginfailed", (request, response)=>{
+    response.sendFile(__dirname+"/public/html/loginFailed.html");
+})
+
 app.post("/login", (request, response)=>{
     console.log(request.body);
     verifyUser(request.body.username, request.body.password, (flag)=>{
         if(!flag){
             console.log("error logging in");
+            response.redirect("/loginfailed");
         }else{
             request.session.username = request.body.username;
             request.session.isLoggedin = true;
             response.redirect("/");
         }
     })
+})
+
+app.get("/logout", (request, response)=>{
+    request.session.destroy((err)=>{
+        if(err){
+            console.log("error destroying a session");
+        }else{
+
+            response.redirect("/login");
+        }
+    });
 })
 
 function getUsersFromFile(callback){
