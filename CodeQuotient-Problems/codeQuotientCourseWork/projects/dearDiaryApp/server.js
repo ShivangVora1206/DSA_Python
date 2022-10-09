@@ -2,7 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const fs = require("fs");
 app = express();
-
+// var isLoggedOut = false;
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
@@ -17,7 +17,9 @@ app.get("/", (request, response)=>{
     if(request.session.isLoggedin){
         console.log("logged in");
         response.sendFile(__dirname+"/public/html/index.html");
-    }else{
+    }
+    
+    else{
         console.log(request.session);
         console.log("not logged in");
         response.redirect("/login");
@@ -125,6 +127,7 @@ app.post("/login", (request, response)=>{
         }else{
             request.session.username = request.body.username;
             request.session.isLoggedin = true;
+            // isLoggedOut = false;
             response.redirect("/");
         }
     })
@@ -135,7 +138,7 @@ app.get("/logout", (request, response)=>{
         if(err){
             console.log("error destroying a session");
         }else{
-
+            // isLoggedOut = true;
             response.redirect("/login");
         }
     });
