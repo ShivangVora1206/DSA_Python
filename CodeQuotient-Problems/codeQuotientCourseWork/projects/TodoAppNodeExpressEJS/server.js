@@ -14,6 +14,8 @@ app.use(session({
     cookie: { secure: false } 
     }))
 
+app.set("view engine", "ejs");
+app.set("views", "./public/views");
 
 app.get("/logout", (request, response)=>{
     request.session.destroy((err)=>{
@@ -41,7 +43,16 @@ app.get("/invalidsignup", (request, response)=>{
 
 app.get("/", (request, response) => {
     if(request.session.isLoggedIn){
-        response.sendFile(__dirname+"/public/html/index.html");
+        getDataFromFile((err, data)=>{
+            if(err){
+                console.log("error reading file");
+            }
+            else{
+            todos = data;
+            console.log(data);
+            response.render("index", {username:request.session.username, tasks:todos});
+            }
+        });
     }else{
         response.redirect("/login");
     }
@@ -150,41 +161,82 @@ app.get("/readTodo", (request, response) => {
     });
 })
 
+function createTaskId(data){
+    let temp = String(data);
+    let sum = "";
+    for(let i=0;i<temp.length;i++){
+        sum += temp.charCodeAt(i);
+    }
+    console.log(sum);
+    return String(parseInt(parseInt(sum)/3.14)).slice(0, 6);
+}
+
 app.post("/addTodo", (request, response) => {
     getDataFromFile((err, data)=>{
+        let template = {
+            "task":{
+                    "data":request.body.newTodo, "status":0
+                    },
+            "taskId":createTaskId(request.body.newTodo)
+        }
         todos = data;
-        todos.push(request.body);
+        todos.push(template);
         console.log(todos);
         writeDataToFile(todos, (err, boolean)=>{
             if(err){
                 console.log("error adding file");
             }else{
                 console.log("task added");
+                response.redirect("/");
             }
         });
     });
 })
 
-app.post("/updateTodoState", (request, response) => {
-    getDataFromFile((err, data)=>{
-        todos = data;
-        console.log(todos);
-        let newTodo = request.body;
-        console.log(newTodo);
-        for(let i=0; i < todos.length; i++){
-            if(todos[i].taskId === newTodo.taskId){
-                todos[i] = newTodo;
-                break
-            }
-        }
+// app.post("/updateTodoState", (request, response) => {
+//     getDataFromFile((err, data)=>{
+//         todos = data;
+//         console.log(todos);
+//         let newTodo = request.body;
+//         console.log(newTodo);
+//         for(let i=0; i < todos.length; i++){
+//             if(todos[i].taskId === newTodo.taskId){
+//                 todos[i] = newTodo;
+//                 break
+//             }
+//         }
 
-        writeDataToFile(todos, (err, boolean)=>{
-            if(err){
-                console.log("error adding file");
-            }else{
-                console.log("task added");
-            }
-        });
+//         writeDataToFile(todos, (err, boolean)=>{
+//             if(err){
+//                 console.log("error adding file");
+//             }else{
+//                 console.log("task added");
+//             }
+//         });
+//     });
+// })
+
+app.post("/updateTodoState", (request, response)=>{
+    getDataFromFile((err, data)=>{
+        if(err){
+            console.log("error reading file from file");
+        }else{
+            let todos = data;
+            todos.filter((value)=>{
+                if(value.taskId === request.body.completeButton){
+                    value.task.status = 1;
+                    return true;
+                }
+            })
+            writeDataToFile(todos, (err, flag)=>{
+                if(err){
+                    console.log("error writing to file");
+                }else{
+                    console.log("data written");
+                    response.redirect("/");
+                }
+            })
+        }
     });
 })
 
@@ -192,10 +244,10 @@ app.post("/deleteTodo", (request, response) => {
     getDataFromFile((err, data)=>{
         todos = data;
         console.log(todos);
-        let newTodo = request.body;
+        let newTodo = request.body.deleteButton;
         console.log(newTodo);
         for(let i=0; i < todos.length; i++){
-            if(todos[i].taskId === newTodo.taskId){
+            if(todos[i].taskId === newTodo){
                 todos.splice(i, 1);
                 break
             }
@@ -206,6 +258,7 @@ app.post("/deleteTodo", (request, response) => {
                 console.log("error writing file");
             }else{
                 console.log("task deleted");
+                response.redirect("/");
             }
         });
     });
