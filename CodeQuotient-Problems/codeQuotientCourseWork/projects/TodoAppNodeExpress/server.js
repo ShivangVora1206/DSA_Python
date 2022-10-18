@@ -1,7 +1,17 @@
 const express = require("express");
 const fs = require("fs");
 const session = require("express-session");
+const multer = require("multer");
+
 const app = express();
+var storage = multer.diskStorage({
+    destination: 'uploads/',
+    filename: function(req, file, callback) {
+    callback(null, file.originalname);
+    }
+    });
+var upload = multer({ storage: storage });
+// const upload = multer({dest : "uploads"});
 let todos = [];
 
 app.use(express.static("public"));
@@ -14,6 +24,9 @@ app.use(session({
     cookie: { secure: false } 
     }))
 
+
+app.set("view engine", "ejs");
+app.set("views", "./public/views");
 
 app.get("/logout", (request, response)=>{
     request.session.destroy((err)=>{
@@ -41,7 +54,7 @@ app.get("/invalidsignup", (request, response)=>{
 
 app.get("/", (request, response) => {
     if(request.session.isLoggedIn){
-        response.sendFile(__dirname+"/public/html/index.html");
+        response.render("index", {username:request.session.username});
     }else{
         response.redirect("/login");
     }
@@ -87,6 +100,10 @@ app.route("/login").get(function(request, response)
 
 
 
+app.get("/uploads/:id", (request, response)=>{
+    response.sendFile(__dirname+"/uploads/"+request.params.id);
+})
+
 app.get("/signup", (request, response) =>{
     if(request.session.isSignedUp){
         response.redirect("/login");
@@ -94,11 +111,12 @@ app.get("/signup", (request, response) =>{
         response.sendFile(__dirname+"/public/html/signup.html");
     }
 })
-.post("/signup", (request, response) => {
+.post("/signup",upload.single("profile") , (request, response) => {
     saveUser(request.body, (err)=>{
         if(err){
             response.redirect("/invalidsignup");
         }else{
+            console.log(request.file);
             request.session.isSignedUp = true;
             response.redirect("/login");
         }
@@ -144,8 +162,13 @@ app.get("/readTodo", (request, response) => {
             console.log("error reading file");
         }
         else{
-        todos = data;
-        response.json(data);
+        todos = data.filter((value)=>{
+            if(value.author === request.session.username){
+
+                return true;
+            };
+        });
+        response.json(todos);
         }
     });
 })

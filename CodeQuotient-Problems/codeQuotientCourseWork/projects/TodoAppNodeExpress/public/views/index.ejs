@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../css/style.css">
+        <title>TODO App js</title>
+    </head>
+    <body>
+        <div id="navbar">
+            <nav>
+                <span id="username">
+                    Hi,  <span id="userNamevar"><%=username%></span>!
+                </span>
+                <span id="logout">
+                    <a href="/logout">Logout</a>
+                </span>
+            </nav>
+        </div>
+        <div class="flexbox-container" style="display:flex;">
+            <div class="sidebar" style="flex:1;">
+                <div id="taskarea">
+                    <label>TASK LIST</label>
+                    <p>Add tasks to your list by typing in the input box and pressing enter.</p>
+                    <table id="tasktable">
+
+                    </table>
+                </div>
+            </div>
+            <div class="main" style="flex:1;">
+                <div>
+                    <label style="padding-left: 30px;">TASK INPUT</label>
+                </div>
+                <div id="inputbox">
+                    <input id="taskinput" type="text" placeholder="I need to...">
+                </div>
+            </div>
+        </div>
+        <script src="../js/script.js"></script>
+    </body>
+</html>

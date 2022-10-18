@@ -6,7 +6,7 @@
     <body>
         <div id="formdiv">
             <h1>New Account</h1>
-            <form method="post" action="signup">
+            <form method="post" action="signup" enctype="multipart/form-data">
                 <div id="usernamediv">
                     <label>Username</label><br>
                     <input type="text" name="username">
@@ -14,6 +14,10 @@
                 <div id="passworddiv">
                     <label>Password</label><br>
                     <input type="password" name="password">
+                </div>
+                <div id="upload-image-div">
+                    <label>Profile Picture</label><br>
+                    <input id="image-upload" type="file" name="profile" accept="image/*">
                 </div>
                 <input type="submit" id="submitbutton">
             </form>

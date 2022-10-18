@@ -1,6 +1,7 @@
 var taskTable = document.querySelector("#tasktable");
 var taskInput = document.querySelector("#taskinput");
-var userNameVar = document.querySelector("#userNameVar");
+// var userNameVar = document.querySelector("#userNameVar");
+var userName = "";
 var tasks = getAllTodosFromServer();
 
 function getUserName() {
@@ -9,7 +10,8 @@ function getUserName() {
     req.send();
     req.addEventListener("load", ()=>{
         console.log("uname", req.responseText);
-        userNameVar.innerHTML = JSON.parse(req.responseText);
+        userName = JSON.parse(req.responseText);
+        // userNameVar.innerHTML = userName;
     })
 }
 
@@ -50,7 +52,8 @@ taskInput.addEventListener("keypress", function (event) {
                     "task":{
                             "data":taskInput.value, "status":0
                             },
-                    "taskId":createTaskId(taskInput.value)
+                    "taskId":createTaskId(taskInput.value),
+                    "author":userName
                 }, "button");
         
     }
