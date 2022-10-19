@@ -15,6 +15,7 @@ var upload = multer({ storage: storage });
 let todos = [];
 
 app.use(express.static("public"));
+app.use(express.static("uploads"));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
 app.use(session({
@@ -54,7 +55,7 @@ app.get("/invalidsignup", (request, response)=>{
 
 app.get("/", (request, response) => {
     if(request.session.isLoggedIn){
-        response.render("index", {username:request.session.username});
+        response.render("index", {username:request.session.username, profile:request.session.profile});
     }else{
         response.redirect("/login");
     }
@@ -84,9 +85,11 @@ app.route("/login").get(function(request, response)
 
 		if(user.length)
 		{
-            request.session.username = request.body.username;
+            console.log(user);
+            request.session.username = user[0].username;
+            request.session.profile = user[0].profile;
 			request.session.isLoggedIn = true;
-            console.log(request.session);
+            // console.log(request.session);
 			response.redirect("/")
 		}
 		else
@@ -100,9 +103,9 @@ app.route("/login").get(function(request, response)
 
 
 
-app.get("/uploads/:id", (request, response)=>{
-    response.sendFile(__dirname+"/uploads/"+request.params.id);
-})
+// app.get("/uploads/:id", (request, response)=>{
+//     response.sendFile(__dirname+"/uploads/"+request.params.id);
+// })
 
 app.get("/signup", (request, response) =>{
     if(request.session.isSignedUp){
@@ -112,7 +115,14 @@ app.get("/signup", (request, response) =>{
     }
 })
 .post("/signup",upload.single("profile") , (request, response) => {
-    saveUser(request.body, (err)=>{
+    
+    const user = {
+        username:request.body.username,
+        password:request.body.password,
+        profile:request.file.filename
+    }
+
+    saveUser(user, (err)=>{
         if(err){
             response.redirect("/invalidsignup");
         }else{

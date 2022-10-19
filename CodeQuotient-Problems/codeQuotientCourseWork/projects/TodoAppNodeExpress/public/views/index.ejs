@@ -2,13 +2,15 @@
     <head>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" href="../css/style.css">
+        <!-- <link rel="stylesheet" href=""> -->
         <title>TODO App js</title>
     </head>
     <body>
         <div id="navbar">
             <nav>
                 <span id="username">
-                    Hi,  <span id="userNamevar"><%=username%></span>!
+                    <span id="profile-img"><img src="<%=profile%>"/></span>
+                    <span id="userNamevar"> Hi,  <%=username%>!</span>
                 </span>
                 <span id="logout">
                     <a href="/logout">Logout</a>
