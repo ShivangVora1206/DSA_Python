@@ -2,6 +2,11 @@ const express = require("express");
 const fs = require("fs");
 const session = require("express-session");
 const multer = require("multer");
+const startDb = require("./database/init");
+const userModel = require("./database/models/user");
+const todoModel = require("./database/models/todos");
+
+startDb();
 
 const app = express();
 var storage = multer.diskStorage({
@@ -73,28 +78,17 @@ app.route("/login").get(function(request, response)
 })
 .post(function(request, response)
 {
-	getUser(function( users )
+	getUser(request.body, function( err, user )
 	{
-		const user = users.filter(function(user)
-		{
-			if( user.username === request.body.username && user.password === request.body.password )
-			{
-				return true
-			}
-		})
-
-		if(user.length)
-		{
-            console.log(user);
-            request.session.username = user[0].username;
-            request.session.profile = user[0].profile;
-			request.session.isLoggedIn = true;
-            // console.log(request.session);
-			response.redirect("/")
-		}
+        if(err){
+            response.redirect("/invalidLogin");
+        }
 		else
 		{
-			response.redirect("/invalidLogin");
+            request.session.username = user[0].username;
+            request.session.profile = user[0].profile;
+            request.session.isLoggedIn = true;
+            response.redirect("/")
 
 		}
 	});
@@ -132,143 +126,106 @@ app.get("/signup", (request, response) =>{
         }
     })
 })
-
-function saveUser(user, callback)
-{
-	getUser(function(users)
-	{   var temp = users.filter((value)=>{
-        if(value.username === user.username){
-            return true;
-        }
-    })
-        if(temp.length){
-            callback(true);
-            return
-        }else{
-
-            users.push(user);
-        }
-
-		fs.writeFile("credentials.json", JSON.stringify(users), function()
-		{
-			callback();
-		});
-	})
-}
-
-function getUser(callback)
-{
-	fs.readFile("credentials.json", "utf-8", function(err, data)
-	{
-		if(data)
-		{
-			callback(JSON.parse(data));
-		}
-	})
-}
 app.get("/readTodo", (request, response) => {
-    getDataFromFile((err, data)=>{
+    getDataFromDB(request.session.username, (err, todos)=>{
         if(err){
             console.log("error reading file");
         }
         else{
-        todos = data.filter((value)=>{
-            if(value.author === request.session.username){
-
-                return true;
-            };
-        });
-        response.json(todos);
+            
+            response.json(todos);
         }
     });
 })
 
+
 app.post("/addTodo", (request, response) => {
-    getDataFromFile((err, data)=>{
-        todos = data;
-        todos.push(request.body);
-        console.log(todos);
-        writeDataToFile(todos, (err, boolean)=>{
-            if(err){
-                console.log("error adding file");
-            }else{
-                console.log("task added");
-            }
-        });
+    addTodoToDB(request.body, (err)=>{
+        if(err){
+            console.log("Error adding todo");
+        }else{
+            response.redirect("/");
+        }
     });
 })
 
 app.post("/updateTodoState", (request, response) => {
-    getDataFromFile((err, data)=>{
-        todos = data;
-        console.log(todos);
-        let newTodo = request.body;
-        console.log(newTodo);
-        for(let i=0; i < todos.length; i++){
-            if(todos[i].taskId === newTodo.taskId){
-                todos[i] = newTodo;
-                break
-            }
-        }
-
-        writeDataToFile(todos, (err, boolean)=>{
-            if(err){
-                console.log("error adding file");
-            }else{
-                console.log("task added");
-            }
-        });
-    });
+    todoModel.findOneAndUpdate({author:request.session.username, task:{data:request.body.task.data, status:0}}, {task:{data:request.body.task.data, status:1}})
+    .then((data)=>{
+        console.log(data);
+        response.redirect("/");
+    }).catch(()=>{
+        console.log("error updating state in DB");
+    })
 })
 
 app.post("/deleteTodo", (request, response) => {
-    getDataFromFile((err, data)=>{
-        todos = data;
-        console.log(todos);
-        let newTodo = request.body;
-        console.log(newTodo);
-        for(let i=0; i < todos.length; i++){
-            if(todos[i].taskId === newTodo.taskId){
-                todos.splice(i, 1);
-                break
-            }
-        }
-
-        writeDataToFile(todos, (err, boolean)=>{
-            if(err){
-                console.log("error writing file");
-            }else{
-                console.log("task deleted");
-            }
-        });
-    });
+    todoModel.deleteOne({author:request.session.username, "task.data":request.body.task.data})
+    .then((data)=>{
+        console.log(data);
+        response.redirect("/");
+    }).catch(()=>{
+        console.log("error deleting from DB");
+    })
 })
 
 app.post("/updateTodoValue", (request, response) => {
-    getDataFromFile((err, data) => {
-        todos = data;
-        console.log(todos);
-        let requestBody = request.body;
-        for(let i=0; i < todos.length; i++){
-            if(todos[i].taskId === requestBody.oldTask.taskId){
-                todos[i].task.data = requestBody.newTask;
-                break
-            }
-        }
-
-        writeDataToFile(todos, (err, boolean)=>{
-            if(err){
-                console.log("error updating file");
-            }else{
-                console.log("task updated");
-            }
-        });
-    });
+    todoModel.findOneAndUpdate({author:request.session.username, "task.data":request.body.oldTask.task.data}, {task:{data:request.body.newTask, status:request.body.oldTask.task.status}})
+    .then((data)=>{
+        console.log(data);
+        response.redirect("/");
+    }).catch(()=>{
+        console.log("error updating state in DB");
+    })
 })
 
 app.listen(3000, () => {
     console.log("Server Ready!");
 })
+
+
+
+function saveUser(user, callback)
+{
+    userModel.create(user).then(()=>{
+        callback(null);
+    }).catch(()=>{
+        callback(true);
+    })
+}
+
+function getUser(form, callback)
+{
+    console.log(form);
+    userModel.find({username:form.username, password:form.password})
+    .then((data)=>{
+
+        if(data.length){
+            callback(false, data);
+        }
+
+    }).catch((e)=>{
+        console.log(e);
+        console.log("error getting data from db");
+        callback(true);
+    });
+}
+
+function getDataFromDB(username, callback) {
+    todoModel.find({author:username}).then((data)=>{
+        callback(null, data);
+    }).catch(()=>{
+        callback(true);
+    })
+}
+
+function addTodoToDB(todo, callback){
+    todoModel.create(todo).then(()=>{
+        callback(null);
+    }).catch(()=>{
+        callback(true);
+    })
+}
 
 function getDataFromFile(callback){
     fs.readFile("database.json", (err, data) => {
