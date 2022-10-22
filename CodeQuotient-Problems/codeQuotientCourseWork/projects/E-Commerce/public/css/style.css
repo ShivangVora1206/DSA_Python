@@ -1,0 +1,76 @@
+main{
+    display: flex;
+    /* display: grid; */
+    justify-content: center;
+    flex-wrap: wrap;
+}
+#main-pop-div{
+    justify-content: center;
+    display: flex;
+    /* width: 100%; */
+}
+.card{
+    margin: 10px;
+    display: flex;
+    background-color: aqua;
+    padding: 10px;
+    border-radius: 10px;
+    flex-direction: column;
+    height: 100px;
+    width: 100px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+.pop-div{
+    display: flex;
+    min-height: 400px;
+    min-width: 300px;
+    padding: 10px;
+    position: absolute;
+    background-color: rgb(44, 50, 60);
+    border-radius: 10px;
+    flex-direction: column;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.pop-sub-div{
+    display: flex;
+    flex-direction: column;
+}
+.pop-img{
+    height: 100px;
+    width: 100px;
+}
+.cancel-button{
+    display: flex;
+    flex-direction: row-reverse;
+    /* padding: 10px; */
+}
+#cancel-button{
+    margin: 10px;
+    font-size: 15;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    font-weight: 800;
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 255);
+    border-width: 0px;
+    border-radius: 10px;
+}
+
+.card-product-name{
+    display: flex;
+}
+.card-product-image{
+    display: flex;
+}
+.card-product-details-btn{
+    display: flex;
+}
+.product-img{
+    height: 50px;
+    width: 50px;
+}
+p{
+    margin:0;
+}
