@@ -6,18 +6,36 @@
     <body>
         <nav>
             <div id="username-pic">
-                <img/>
-                <span id="username">Hi <%=username%>!</span>
+                <img src="github-logo-591412835.jpg"/>
+                <span id="username"><h1>Hi <%=username%>!</h1></span>
             </div>
             <div id="logout">
-                <a href="logout">logout</a>
+                <a href="logout"><h1>logout</h1></a>
             </div>
         </nav>
         <div id="main-pop-div">
             <main id="main">
+                <%products.forEach((product)=>{%>
+                    <div class="card">
+                        <div class="card-product-image">
+                            <img class="product-img" name="<%=product.productDescription%>" src="<%=product.productImage%>">
+                        </div>
+                        <div>
+                        <div class="card-product-name">
+                            <h1><%=product.productName%></h1>
+                        </div>
+                        <h2><%=product.productPrice%></h2>
+                        <!-- <div class="card-product-details-btn">
+                            <button class="btn" value="<%=product.productDescription%>">Details</button>
+                        </div> -->
+                    </div>
+                </div>
+                <%})%>
             </main>
         </div>
-        <button id="load-more">Load More</button>
+        <form method="post" action="/">
+            <button id="load-more" type="submit" name="lastCount" value="<%= curCount %>">Load More</button>
+        </form>
         <script src="../js/script.js"></script>
     </body>
 

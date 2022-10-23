@@ -1,4 +1,3 @@
-const { json } = require("body-parser");
 const express = require("express");
 const session = require("express-session");
 const fs = require("fs");
@@ -28,7 +27,35 @@ app.set("view engine", "ejs");
 app.set("views", "./public/views");
 
 app.get("/", (request, response)=>{
-    response.render("index", {username:request.session.username});
+    if(!request.session.isLoggedIn){
+        response.redirect("/login");
+    }
+    getProducts((err, data)=>{
+        if(err){
+            console.log("Error getting products");
+        }else{
+            let curCount = 5;
+            data = data.slice(0, curCount);
+            // console.log(request);
+            response.render("index", {username:request.session.username, products:data, curCount:curCount});
+        }
+    })
+}).post("/", (request, response)=>{
+    if(!request.session.isLoggedIn){
+        response.redirect("/login");
+    }
+    getProducts((err, data)=>{
+        if(err){
+            console.log("Error getting products");
+        }else{
+            console.log(request.body);
+            let curCount = parseInt(request.body.lastCount) + 5;
+            data = data.slice(0, curCount);
+            // console.log(data.length);
+            response.render("index", {username:request.session.username, products:data, curCount:curCount});
+        }
+    })
+    
 })
 
 
@@ -45,6 +72,9 @@ app.get("/getProducts", (request, response)=>{
 
 
 app.get("/login", (request, response)=>{
+    if(request.session.isLoggedIn){
+        response.redirect("/");
+    }
     response.sendFile(__dirname+"/public/html/login.html");
 }).post("/login", (request, response)=>{
     getUserData((err, data)=>{
@@ -62,6 +92,8 @@ app.get("/login", (request, response)=>{
                 request.session.username = user[0].username;
                 request.session.isLoggedIn = true;
                 response.redirect("/");
+            }else{
+                response.redirect("/login");
             }
     }
     })
@@ -88,6 +120,18 @@ app.get("/signup", (request, response)=>{
         })
     })
 })
+
+app.get("/logout", (request, response)=>{
+    request.session.destroy((err)=>{
+        if(err){
+            console.log("Erros destroying session");
+        }else{
+            console.log("Session Destroy");
+            response.redirect("/login");
+        }
+    })
+})
+
 
 function getUserData(callback) {
     fs.readFile("credentials.json", (err, data)=>{
