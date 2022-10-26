@@ -4,15 +4,8 @@
         <link rel="stylesheet" href="../css/style.css">
     </head>
     <body>
-        <nav>
-            <div id="username-pic">
-                <img src="github-logo-591412835.jpg"/>
-                <span id="username"><h1>Hi <%=username%>!</h1></span>
-            </div>
-            <div id="logout">
-                <a href="logout"><h1>logout</h1></a>
-            </div>
-        </nav>
+        <!-- partials -->
+        <%- include("partials/header"); %>
         <div id="main-pop-div">
             <main id="main">
                 <%products.forEach((product)=>{%>
