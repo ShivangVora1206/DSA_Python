@@ -5,11 +5,7 @@
     </head>
     <body>
         <!-- partials -->
-        <% if(username === undefined){ %>
-        <%- include("partials/header-index-wo-login"); %>
-        <% }else{ %>
-            <%- include("partials/header-index"); %>
-        <% } %>
+        <%- include("partials/header-incart"); %>
         <div id="main-pop-div">
             <main id="main">
                 <%products.forEach((product)=>{%>
@@ -22,9 +18,19 @@
                             <h1><%=product.productName%></h1>
                         </div>
                         <h2><%=product.productPrice%></h2>
-                        <form method="post" action="addProductToCart">
-                            <button type="submit" name="productName" value="<%= product.productName %>" id="add-to-cart-btn">Add to Cart</button>
+                        <form method="post" action="removeProductFromCart">
+                            <button type="submit" name="productName" value="<%= product.productName %>" id="remove-to-cart-btn">Remove</button>
                         </form>
+                        <div id="plus-minus">
+                            <form method="post" action="decrementInCart">
+                                <button type="submit" name="productName" value="<%= product.productName %>" id="plus-minus-btn">-</button>
+                            </form>
+                            <p id="cart-count"><%= product.count %></p>
+                            <form method="post" action="incrementInCart">
+                                <button type="submit" name="productName" value="<%= product.productName %>" id="plus-minus-btn">+</button>
+                            </form>
+
+                        </div>
                         <!-- <div class="card-product-details-btn">
                             <button class="btn" value="<%=product.productDescription%>">Details</button>
                         </div> -->
@@ -33,9 +39,9 @@
                 <%})%>
             </main>
         </div>
-        <form id="load-more" method="post" action="/">
-            <button id="load-more" type="submit" name="lastCount" value="<%= curCount %>">Load More</button>
-        </form>
+        <!-- <form method="post" action="/">
+            <button id="load-more" type="submit" name="lastCount" value="curCount">Load More</button>
+        </form> -->
         <script src="../js/script.js"></script>
     </body>
 

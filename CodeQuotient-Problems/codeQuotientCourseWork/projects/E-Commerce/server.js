@@ -11,6 +11,7 @@ const postAllProducts = require("./controllers/postAllProducts");
 const postUserSignup = require("./controllers/postUserSignup");
 const forgotPassword = require("./controllers/forgotPassword");
 const forgotPasswordEmail = require("./controllers/forgotPasswordEmail");
+const productModel = require("./database/models/products");
 startDb();
 
 app.use(express.static("public"));
@@ -59,7 +60,7 @@ app.get("/login", (request, response)=>{
             console.log(user);
             if(user.length){
                 if(user[0].isVerified){
-
+                    request.session.email = user[0].email;
                     request.session.username = user[0].username;
                     request.session.isLoggedIn = true;
                     request.session.profile = user[0].profile;
@@ -119,6 +120,154 @@ app.get("/forgotPasswordEmailSent", (request, response)=>{
     response.sendFile(__dirname+"/public/html/forgotPasswordEmailSent.html");
 })
 
+app.post("/addProductToCart", (request, response)=>{
+    if(!request.session.isLoggedIn){
+        response.redirect("/login");
+    }
+    userModel.find({email:request.session.email})
+    .then((data)=>{
+        console.log(request.body);
+        let cart = data[0].cart;
+        cart.push({productName:request.body.productName, quantity:1});
+        userModel.updateOne({email:request.session.email}, {cart:cart})
+        .then((data)=>{
+            console.log(data);
+            console.log("Product added to cart");
+            response.redirect("/");
+        }).catch((e)=>{
+            console.log("error updating to cart");
+        })
+
+    }).catch((e)=>{
+        console.log('Error adding product to cart');
+    })
+})
+
+app.post("/removeProductFromCart", (request, response)=>{
+    if(!request.session.isLoggedIn){
+        response.redirect("/login");
+    }
+    userModel.find({email:request.session.email})
+    .then((data)=>{
+        console.log(request.body);
+        let cart = data[0].cart;
+        let Index = 0;
+        let match = cart.filter((value, index)=>{
+            if(request.body.productName === value.productName){
+                Index = index;
+                return true;
+            }
+        })
+        cart.splice(Index, 1);
+        userModel.updateOne({email:request.session.email}, {cart:cart})
+        .then((data)=>{
+            console.log(data);
+            console.log("Product added to cart");
+            response.redirect("/viewCart");
+        }).catch((e)=>{
+            console.log("error updating to cart");
+        })
+
+    }).catch((e)=>{
+        console.log('Error adding product to cart');
+    })
+})
+
+
+app.post("/incrementInCart", (request, response)=>{
+    if(!request.session.isLoggedIn){
+        response.redirect("/login");
+    }
+    userModel.find({email:request.session.email})
+    .then((data)=>{
+        console.log(request.body);
+        let cart = JSON.parse(JSON.stringify(data[0].cart));
+        let Index = 0;
+        let match = cart.filter((value, index)=>{
+            if(value.productName === request.body.productName){
+                Index = index;
+                return true;
+            }
+        });
+        let curCount = match[0].quantity;
+        cart[Index].quantity = curCount+1;
+        userModel.updateOne({email:request.session.email}, {cart:cart})
+        .then((data)=>{
+            console.log(data);
+            console.log("Product count updated to cart");
+            response.redirect("/viewCart");
+        }).catch((e)=>{
+            console.log("error updating to cart");
+        })
+
+    }).catch((e)=>{
+        console.log(e);
+        console.log('Error adding product to cart');
+    })
+})
+
+app.post("/decrementInCart", (request, response)=>{
+    if(!request.session.isLoggedIn){
+        response.redirect("/login");
+    }
+    userModel.find({email:request.session.email})
+    .then((data)=>{
+        console.log(request.body);
+        let cart = JSON.parse(JSON.stringify(data[0].cart));
+        let Index = 0;
+        let match = cart.filter((value, index)=>{
+            if(value.productName === request.body.productName){
+                Index = index;
+                return true;
+            }
+        });
+        let curCount = match[0].quantity;
+        cart[Index].quantity = curCount-1;
+        userModel.updateOne({email:request.session.email}, {cart:cart})
+        .then((data)=>{
+            console.log(data);
+            console.log("Product count updated to cart");
+            response.redirect("/viewCart");
+        }).catch((e)=>{
+            console.log("error updating to cart");
+        })
+
+    }).catch((e)=>{
+        console.log(e);
+        console.log('Error adding product to cart');
+    })
+})
+
+
+
+app.get("/viewCart", (request, response)=>{
+    if(!request.session.isLoggedIn){
+        response.redirect("/login");
+    }
+    userModel.find({email:request.session.email})
+    .then((data)=>{
+        let cart = data[0].cart;
+        let names = [];
+        let dict = {};
+        for(var i=0;i<cart.length;i++){
+            names.push(cart[i].productName);
+            dict[cart[i].productName] = cart[i].quantity;
+        }
+        productModel.find({ "productName":{$in:names}})
+        .then((data)=>{
+            let newData = JSON.parse(JSON.stringify(data));
+            for(var j=0;j<newData.length;j++){
+                newData[j].count = dict[newData[j].productName];
+                console.log(newData[j]);
+            }
+            response.render("userCart", {username:request.session.username, profile:request.session.profile, products:newData});
+        }).catch((e)=>{
+            console.log(e);
+        })
+    }).catch((e)=>{
+        console.log(e);
+    })
+})
 
 // function getUserData(form, callback) {
 //     console.log(form);

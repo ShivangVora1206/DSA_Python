@@ -6,7 +6,8 @@ module.exports = function(request, response){
         username : request.body.username,
         password : request.body.password,
         profile : request.file.filename,
-        isVerified : false
+        isVerified : false,
+        cart : []
     }
         userModel.create(user).then(()=>{
         sendMail.sendMail(

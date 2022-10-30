@@ -1,8 +1,8 @@
 const getAllProducts = require("../services/product/getAllProducts");
 module.exports = function (request, response){
-    if(!request.session.isLoggedIn){
-        response.redirect("/login");
-    }
+    // if(!request.session.isLoggedIn){
+    //     response.redirect("/login");
+    // }
     getAllProducts((err, data)=>{
         if(err){
             console.log("Error getting products");

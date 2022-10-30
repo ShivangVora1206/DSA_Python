@@ -19,17 +19,22 @@ img{
 }
 form{
     display: flex;
+    justify-content: flex-start;
+    margin-bottom: 0;
+}
+#load-more{
     justify-content: center;
 }
 button{
+    margin: 5px;
     background-color: rgb(255, 255, 255);
     color: rgb(0, 0, 0);
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: medium;
+    font-size: 13px;
     font-weight: 600;
     border-width: 0;
     border-radius: 5px;
-    padding: 7px;
+    padding: 6px;
 }
 button:hover{
     background-color: black;
@@ -44,7 +49,7 @@ button:hover{
 }
 #logout{
     display: flex;
-    margin-right: 15px;
+    /* margin-right: 15px; */
 }
 main{
     display: flex;
@@ -58,6 +63,7 @@ main{
     /* width: 100%; */
 }
 .card{
+    overflow-wrap: break-word;
     color: white;
     margin: 10px;
     display: flex;
@@ -66,9 +72,11 @@ main{
     padding: 10px;
     border-radius: 10px;
     /* flex-direction: column; */
-    flex-direction: row;
+    /* flex-direction: row; */
+    flex-direction: row-reverse;
     min-height: 100px;
     min-width: 260px;
+    max-width: 300px;
     justify-content: space-around;
     /* align-items: flex-start; */
     align-items: center;
@@ -86,7 +94,7 @@ main{
 .pop-div{
     display: flex;
     min-height: 400px;
-    width: 300px;
+    width: 500px;
     padding: 20px;
     position: absolute;
     background-color: rgb(21, 21, 21);
@@ -121,6 +129,7 @@ main{
 }
 
 .card-product-name{
+    overflow-wrap: break-word;
     display: flex;
     text-align: left;
 }
@@ -131,9 +140,11 @@ main{
     display: flex;
 }
 .product-img{
+    border-radius: 10px;
     height: 155px;
     width: 170px;
     margin-right: 6px;
+    margin-left: 6px;
 }
 p{
     margin:0;
@@ -144,7 +155,8 @@ p{
 }
 h1{
     margin: 0;
-    font-size: 20px;
+    overflow-wrap: break-word;
+    font-size: 17px;
     font-weight: 500;
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
@@ -157,4 +169,19 @@ h2{
 }
 a{
     color: white;
+    margin-right: 20px;
+}
+#plus-minus{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+#plus-minus-btn{
+    padding-top: 0px;
+    padding-bottom: 0px;
+    width: 25px;
+    font-size: large;
+}
+#remove-to-cart-btn{
+    width: 67px;
 }
