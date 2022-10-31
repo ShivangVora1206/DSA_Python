@@ -6,6 +6,7 @@ const userSchema = new Schema({
     username:String,
     password:String,
     profile:String,
+    role:String,
     isVerified:Boolean,
     cart:[{ productName: String, quantity: Number }]
 }

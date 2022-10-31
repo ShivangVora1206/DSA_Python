@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <title>E-Commerce</title>
+        <link rel="stylesheet" href="../css/style.css">
+    </head>
+    <body>
+        <!-- partials -->
+        <% if(username === undefined){ %>
+        <%- include("partials/header-index-wo-login"); %>
+        <% }else{ %>
+            <%- include("partials/header-admin-index"); %>
+        <% } %>
+        <div id="main-pop-div">
+            <main id="main">
+                <%products.forEach((product)=>{%>
+                    <div class="card">
+                        <div class="card-product-image">
+                            <img class="product-img" name="<%=product.productDescription%>" src="<%=product.productImage%>">
+                        </div>
+                        <div>
+                        <div class="card-product-name">
+                            <h1><%=product.productName%></h1>
+                        </div>
+                        <h2><%=product.productPrice%></h2>
+                        <form method="post" action="modifyProductPage">
+                            <button type="submit" name="productName" value="<%= product.productName %>" id="add-to-cart-btn">Modify</button>
+                        </form>
+                        <form method="post" action="deleteProduct">
+                            <button type="submit" name="productName" value="<%= product.productName %>" id="add-to-cart-btn">Delete</button>
+                        </form>
+                        <!-- <div class="card-product-details-btn">
+                            <button class="btn" value="<%=product.productDescription%>">Details</button>
+                        </div> -->
+                    </div>
+                </div>
+                <%})%>
+            </main>
+        </div>
+        <form id="load-more" method="post" action="/">
+            <button id="load-more" type="submit" name="lastCount" value="<%= curCount %>">Load More</button>
+        </form>
+        <script src="../js/script.js"></script>
+    </body>
+
+</html>

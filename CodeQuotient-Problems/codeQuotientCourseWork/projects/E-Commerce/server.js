@@ -7,6 +7,7 @@ const startDb = require("./database/init");
 const userModel = require("./database/models/user");
 const getUserData = require("./controllers/getUserData");
 const getAllProducts = require("./controllers/getAllProducts");
+const adminGetAllProducts = require("./controllers/adminGetAllProducts");
 const postAllProducts = require("./controllers/postAllProducts");
 const postUserSignup = require("./controllers/postUserSignup");
 const forgotPassword = require("./controllers/forgotPassword");
@@ -39,6 +40,8 @@ app.set("views", "./public/views");
 app.route("/").get(getAllProducts);
 app.route("/").post(postAllProducts);
 
+app.route("/admin").get(adminGetAllProducts);
+
 app.get("/postSignup", (request, response)=>{
     response.sendFile(__dirname+"/public/html/postSignup.html");
 })
@@ -64,7 +67,14 @@ app.get("/login", (request, response)=>{
                     request.session.username = user[0].username;
                     request.session.isLoggedIn = true;
                     request.session.profile = user[0].profile;
-                    response.redirect("/");
+                    if(request.body.role === "admin" && user[0].role === "admin"){
+
+                        response.redirect("/admin");
+
+                    }else{
+
+                        response.redirect("/");
+                    }
                 }else{
                     response.redirect("/login");
                 }
@@ -89,6 +99,58 @@ app.get("/logout", (request, response)=>{
             response.redirect("/login");
         }
     })
+})
+
+app.post("/modifyProductPage", (request, response)=>{
+    productModel.find({productName:request.body.productName})
+    .then((data)=>{
+        console.log(data);
+        response.render("modifyProductPage", {product:data});
+    }).catch((e)=>{
+        console.log(e);
+    })
+})
+
+app.post("/modifyProduct", (request, response)=>{
+    console.log(request.body);
+    productModel.updateOne({_id : request.body.productId}, {productName:request.body.productName, productPrice:request.body.productPrice, productDescription:request.body.productDesc})
+    .then((data)=>{
+        console.log(data);
+        response.redirect("/admin");
+    }).catch((e)=>{
+        console.log(e);
+    })
+})
+
+app.get("/addProduct", (request, response)=>{
+    response.sendFile(__dirname+"/public/html/addProduct.html");
+})
+
+app.post("/addProduct", upload.single("productImage"), (request, response)=>{
+    console.log(request.body);
+    let product = {
+        productName : request.body.ProductName,
+        productPrice : request.body.productPrice,
+        productImage : request.file.filename,
+        productDescription : request.body.productDesc
+    }
+    console.log(product);
+    productModel.create(product).then((data)=>{
+        console.log(data);
+        response.redirect("/admin");
+    }).catch((e)=>{
+        console.log(e);
+    })
+})
+
+app.post("/deleteProduct", (request, response)=>{
+    productModel.deleteOne({productName:request.body.productName})
+    .then((data)=>{
+        console.log(data);
+        response.redirect("/admin");
+    }).catch((e)=>{
+        console.log(e);
+    });
 })
 
 app.route("/getAllProducts").get(getAllProducts);
