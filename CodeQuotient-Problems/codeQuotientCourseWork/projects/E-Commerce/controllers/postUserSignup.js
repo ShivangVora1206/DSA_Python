@@ -1,11 +1,14 @@
 const userModel = require("../database/models/user");
 const sendMail = require("../services/mail/sendMail.js");
+const hashPassword = require("../services/user/hashPassword");
+
+
 module.exports = function(request, response){
     console.log(request.body);
     let user = {
         email : request.body.email,
         username : request.body.username,
-        password : request.body.password,
+        password : hashPassword(request.body.password),
         profile : request.file.filename,
         role : request.body.role,
         isVerified : false,

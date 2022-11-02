@@ -8,7 +8,7 @@
 <body>
     <div id="formdiv">
         <h1>Login</h1>
-        <form method="post" action="login">
+        <form method="post" name="loginform" onsubmit="return validateForm()" action="login">
             <div id="usernamediv">
                 <label>Username</label><br>
                 <input type="text" name="username">
@@ -29,6 +29,21 @@
         </form>
         <a href="/signup">signup</a>
     </div>
+    <script>
+        function validateForm() {
+            var name = document.forms["loginform"]["username"].value;
+            var password = document.forms["loginform"]["password"].value;
+            var role = document.forms["loginform"]["role"].value;
+            if (name && password && role) {
+                return true;
+            }
+            else{
+                alert("Please Fill All The Fields");
+                return false;
+            }
+            }
+
+    </script>
 </body>
 
 </html>

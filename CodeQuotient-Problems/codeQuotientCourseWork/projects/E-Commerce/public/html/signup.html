@@ -6,10 +6,10 @@
     <body>
         <div id="formdiv">
             <h1>New Account</h1>
-            <form method="post" action="signup" enctype="multipart/form-data">
+            <form method="post" name="signupform" onsubmit="return validateForm()" action="signup" enctype="multipart/form-data">
                 <div id="usernamediv">
                     <label>Email</label><br>
-                    <input type="email" name="email">
+                    <input type="email" name="email" id="email">
                 </div>
                 <div id="usernamediv">
                     <label>Username</label><br>
@@ -35,5 +35,22 @@
             </form>
             <a href="/login">login</a>
         </div>
+        <script>
+            function validateForm() {
+                var email = document.forms["signupform"]["email"].value;
+                var name = document.forms["signupform"]["username"].value;
+                var password = document.forms["signupform"]["password"].value;
+                var role = document.forms["signupform"]["role"].value;
+                var image = document.forms["signupform"]["profile"].value;
+                if (email && name && password && role && image) {
+                    return true;
+                }
+                else{
+                    alert("Name must be filled out");
+                    return false;
+                }
+                }
+
+        </script>
     </body>
 </html>

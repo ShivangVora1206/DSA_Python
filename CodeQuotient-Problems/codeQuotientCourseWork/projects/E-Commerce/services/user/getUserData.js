@@ -1,7 +1,8 @@
 const userModel = require("../../database/models/user");
+const hashPassword = require("./hashPassword");
 module.exports = function(form, callback){
 
-    userModel.find({username:form.username, password:form.password})
+    userModel.find({username:form.username, password:hashPassword(form.password)})
         .then((data)=>{
     
             if(data.length){

@@ -1,12 +1,12 @@
 <html>
     <head>
         <title>E-Commerce | Signup</title>
-        <link rel="stylesheet" href="../css/signup.css">
+        <link rel="stylesheet" href="../css/addProduct.css">
     </head>
     <body>
         <div id="formdiv">
             <h1>Add New Product</h1>
-            <form method="post" action="addProduct" enctype="multipart/form-data">
+            <form method="post" name="addproductform" onsubmit="return validateForm()" action="addProduct" enctype="multipart/form-data">
                 <div id="usernamediv">
                     <label>Product Name</label><br>
                     <input type="text" name="ProductName">
@@ -25,6 +25,22 @@
                 </div>
                 <input type="submit" id="submitbutton">
             </form>
+            <script>
+                function validateForm() {
+                    var ProductName = document.forms["addproductform"]["ProductName"].value;
+                    var productDesc = document.forms["addproductform"]["productDesc"].value;
+                    var productPrice = document.forms["addproductform"]["productPrice"].value;
+                    var image = document.forms["addproductform"]["productImage"].value;
+                    if (productDesc && productPrice && ProductName && image) {
+                        return true;
+                    }
+                    else{
+                        alert("Please Fill All The Fields");
+                        return false;
+                    }
+                    }
+    
+            </script>
             <!-- <a href="/login">login</a> -->
         </div>
     </body>

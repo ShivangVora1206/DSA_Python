@@ -1,7 +1,7 @@
 productModel = require("../../database/models/products");
 
-module.exports = function (callback) {
-    productModel.find({})
+module.exports = function (limit, callback) {
+    productModel.find({}).limit(limit)
     .then((data)=>{
 
         if(data.length){
