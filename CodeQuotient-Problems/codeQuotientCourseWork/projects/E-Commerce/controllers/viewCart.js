@@ -21,7 +21,7 @@ module.exports = function (request, response){
                 newData[j].count = dict[newData[j].productName];
                 console.log(newData[j]);
             }
-            response.render("userCart", {username:request.session.username, profile:request.session.profile, products:newData});
+            response.render("userCart", {username:request.session.username, email:request.session.email, profile:request.session.profile, products:newData});
         }).catch((e)=>{
             console.log(e);
         })

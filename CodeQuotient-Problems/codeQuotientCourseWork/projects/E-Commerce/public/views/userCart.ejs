@@ -9,7 +9,7 @@
         <div id="main-pop-div">
             <main id="main">
                 <%products.forEach((product)=>{%>
-                    <div class="card">
+                    <div class="card" id="<%=product.productName%>">
                         <div class="card-product-image">
                             <img class="product-img" name="<%=product.productDescription%>" src="<%=product.productImage%>">
                         </div>
@@ -18,31 +18,98 @@
                             <h1><%=product.productName%></h1>
                         </div>
                         <h2><%=product.productPrice%></h2>
-                        <form method="post" action="removeProductFromCart">
-                            <button type="submit" name="productName" value="<%= product.productName %>" id="remove-to-cart-btn">Remove</button>
-                        </form>
-                        <div id="plus-minus">
-                            <form method="post" action="decrementInCart">
-                                <button type="submit" name="productName" value="<%= product.productName %>" id="plus-minus-btn">-</button>
-                            </form>
-                            <p id="cart-count"><%= product.count %></p>
-                            <form method="post" action="incrementInCart">
-                                <button type="submit" name="productName" value="<%= product.productName %>" id="plus-minus-btn">+</button>
-                            </form>
+                        <% let sep="|"; %>
+                            <script>
+                    
+                                function removeProductFromDb(string){
+                                    let arr = string.split("|");
+                                    let productName = arr[0];
+                                    let userEmail = arr[1];
+                                    let main = document.getElementById("main");
+                                    const req = new XMLHttpRequest();
+                                    req.open("POST", "http://127.0.0.1:3000/ajaxremove");
+                                    req.setRequestHeader("Content-Type", "application/json");
+                                    let body = {
+                                        "productName" : productName,
+                                        "userEmail" : userEmail
+                                    };
+                                    req.send(JSON.stringify(body));
+                                    req.addEventListener("load", (data)=>{
+                                        console.log(data);
+                                    });
+                                    let card = document.getElementById(productName);
+                                    console.log(card);
+                                    main.removeChild(card);
+                                }
+
+                                function decrementProductFromDb(string){
+                                    let arr = string.split("|");
+                                    let productName = arr[0];
+                                    let userEmail = arr[1];
+                                    let count = document.getElementById("cart-count"+productName);
+                                    let newCount = parseInt(count.innerHTML)-1;
+                                    if(newCount <= 0){
+                                        removeProductFromDb(string);
+                                        return;
+                                    }
+                                    const req = new XMLHttpRequest();
+                                    req.open("POST", "http://127.0.0.1:3000/ajaxChangeCartQuantity");
+                                    req.setRequestHeader("Content-Type", "application/json");
+                                    let body = {
+                                        "productName" : productName,
+                                        "userEmail" : userEmail,
+                                        "count" : newCount
+                                    };
+                                    req.send(JSON.stringify(body));
+                                    req.addEventListener("load", (data)=>{
+                                        console.log(data);
+                                    });
+                                    count.innerHTML = newCount;
+                                }
+
+                                function incrementProductFromDb(string){
+                                    let arr = string.split("|");
+                                    let productName = arr[0];
+                                    let userEmail = arr[1];
+                                    let count = document.getElementById("cart-count"+productName);
+                                    // console.log(count);
+                                    let newCount = parseInt(count.innerHTML)+1;
+                                    const req = new XMLHttpRequest();
+                                    req.open("POST", "http://127.0.0.1:3000/ajaxChangeCartQuantity");
+                                    req.setRequestHeader("Content-Type", "application/json");
+                                    let body = {
+                                        "productName" : productName,
+                                        "userEmail" : userEmail,
+                                        "count" : newCount
+                                    };
+                                    req.send(JSON.stringify(body));
+                                    req.addEventListener("load", (data)=>{
+                                        console.log(data);
+                                    });
+                                    count.innerHTML = newCount;
+                                }
+
+                    
+                            </script>
+                        
+                            <button type="submit" onclick="removeProductFromDb(value)" name="productName" value="<%= product.productName+sep+email %>" id="remove-to-cart-btn">Remove</button>
+                    
+                        <div class="plus-minus">
+                                <% let btn1 = "dec-btn" %>
+                                <button type="submit" onclick="decrementProductFromDb(value)" name="productName" value="<%= product.productName+sep+email %>"  id="<%=btn1+product.productName%>" class="plus-minus-btn">-</button>
+                                
+                                <% let cartcount = "cart-count" %>
+                                <p id="<%=cartcount+product.productName%>"><%= product.count %></p>
+                                
+                                <% let btn2 = "inc-btn" %>
+                                <button type="submit" onclick="incrementProductFromDb(value)" name="productName" value="<%= product.productName+sep+email %>" id="<%=btn2+product.productName%>" class="plus-minus-btn">+</button>
 
                         </div>
-                        <!-- <div class="card-product-details-btn">
-                            <button class="btn" value="<%=product.productDescription%>">Details</button>
-                        </div> -->
                     </div>
                 </div>
                 <%})%>
             </main>
         </div>
-        <!-- <form method="post" action="/">
-            <button id="load-more" type="submit" name="lastCount" value="curCount">Load More</button>
-        </form> -->
-        <script src="../js/script.js"></script>
     </body>
 
 </html>

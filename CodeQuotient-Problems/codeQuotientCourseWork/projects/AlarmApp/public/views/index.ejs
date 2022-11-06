@@ -1,0 +1,109 @@
+<head>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <h1>Alarm app</h1>
+    <div>
+    <!-- <form method="post" action="newAlarm"> -->
+        <label>Alarm Date</label>
+        <input type="date" id="date">
+        <!-- <input id="year" name="year" type="text">
+        <label>Alarm month</label>
+        <input id="month" name="month" type="text">
+        <label>Alarm day</label>
+        <input id="day" name="day" type="text"> -->
+        <label>Alarm Time</label>
+        <input type="time" id="time">
+        <!-- <input id="hours" name="hours" type="text">
+        <label>Alarm mins</label>
+        <input id="mins" name="mins" type="text">
+        <label>Alarm secs</label>
+        <input id="secs" name="secs" type="text"> --> 
+        <button id="button" value="<%= username %>" type="submit">Add Alarm</button>
+    <!-- </form> --></div>
+    <div id="main"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var mainDiv = document.getElementById("main");
+        var button = document.getElementById("button");
+        var socket = io();
+        socket.on("alarm-from-server", (res)=>{
+            console.log(res);
+            alert("ALARM IS RINGING!!");
+        })
+        socket.on("from-server", (res)=>{
+            console.log(res);
+            var div = document.createElement("div");
+            var p = document.createElement("p");
+            p.innerHTML = res;
+            div.appendChild(p);
+            document.body.appendChild(div);
+        })
+
+        populatePage();
+        
+        socket.emit("username-handshake", button.value);
+        
+        button.addEventListener("click", ()=>{
+            var date = document.getElementById("date");
+            var time = document.getElementById("time");
+            var year = date.value.split("-")[0]
+            var month = date.value.split("-")[1]
+            var day = date.value.split("-")[2]
+            var hours = time.value.split(":")[0];
+            var mins = time.value.split(":")[1];
+            let body = {
+                year : parseInt(year),
+                month : parseInt(month),
+                day : parseInt(day),
+                hours : parseInt(hours),
+                mins : parseInt(mins),
+            }
+
+            socket.emit("from-client", button.value+"|"+JSON.stringify(body));
+            populatePage();
+            })
+
+        function populatePage() {
+                    // document.body.removeChild(mainDiv);
+                    mainDiv.innerHTML = "";
+                    let req = new XMLHttpRequest();
+                    req.open("post", "http://127.0.0.1:3000/getAlarms");
+                    let body = {username:button.value};
+                    req.setRequestHeader("Content-Type", "application/json");
+                    req.send(JSON.stringify(body));
+                    req.addEventListener("load", (response)=>{
+                        let responses = JSON.parse(response.currentTarget.responseText);
+                        responses.forEach(element => {
+                            let deleteButton = document.createElement("button");
+                            let newDiv = document.createElement("div");
+                            let alarmText = document.createElement("h3");
+
+                            deleteButton.innerHTML = "Delete Alarm";
+                            newDiv.className = "card";
+
+                            
+                            // newDiv.className = "alarm-div";
+                            alarmText.innerHTML = `${element["day"]}/${element["month"]}/${element["year"]} ${element["hours"]}:${element["mins"]}`;
+                            newDiv.appendChild(deleteButton);
+                            newDiv.appendChild(alarmText);
+                            mainDiv.appendChild(newDiv);
+                            document.body.appendChild(mainDiv);
+                            deleteButton.addEventListener("click", ()=>{
+                                
+                                let primaryKey = parseInt(element["year"]+element["month"]+element["day"]+element["hours"]+element["mins"]);
+                                
+                                let req = new XMLHttpRequest();
+                                req.open("post", "http://127.0.0.1:3000/deleteAlarm");
+                                let body = {username:button.value, primaryKey:primaryKey};
+                                req.setRequestHeader("Content-Type", "application/json");
+                                req.send(JSON.stringify(body));
+                                mainDiv.removeChild(newDiv);
+                            })
+                        });
+                    })
+        }
+
+        
+    </script>
+</body>

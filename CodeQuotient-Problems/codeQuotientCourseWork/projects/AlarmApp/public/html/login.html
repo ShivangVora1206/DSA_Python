@@ -1,0 +1,42 @@
+<html>
+
+<head>
+    <title>E-Commerce | Login</title>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+    <div id="formdiv">
+        <h1>Login</h1>
+        <form method="post" name="loginform" onsubmit="return validateForm()" action="login">
+            <div id="usernamediv">
+                <label>Username</label><br>
+                <input type="text" name="username">
+            </div>
+            <div id="passworddiv">
+                <label>Password</label><br>
+                <input type="password" name="password">
+            </div>
+
+            <a href="/forgotPasswordEmail">forgot password</a><br>
+            <input type="submit" id="submitbutton">
+        </form>
+        <a href="/signup">signup</a>
+    </div>
+    <script>
+        function validateForm() {
+            var name = document.forms["loginform"]["username"].value;
+            var password = document.forms["loginform"]["password"].value;
+            if (name && password) {
+                return true;
+            }
+            else{
+                alert("Please Fill All The Fields");
+                return false;
+            }
+            }
+
+    </script>
+</body>
+
+</html>

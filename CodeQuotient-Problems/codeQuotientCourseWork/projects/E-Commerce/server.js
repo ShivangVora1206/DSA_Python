@@ -67,7 +67,8 @@ app.get("/login", (request, response)=>{
         response.redirect("/");
     }
     response.sendFile(__dirname+"/public/html/login.html");
-}).post("/login", postLogin);
+})
+app.post("/login", postLogin);
 
 app.get("/signup", (request, response)=>{
     response.sendFile(__dirname+"/public/html/signup.html");
@@ -101,7 +102,8 @@ app.post("/forgotPassword",forgotPassword);
 
 app.get("/forgotPasswordEmail", (request, response)=>{
     response.sendFile(__dirname+"/public/html/forgotPasswordEmail.html");
-}).post("/forgotPasswordEmail", forgotPasswordEmail);
+})
+app.post("/forgotPasswordEmail", forgotPasswordEmail);
 
 app.get("/forgotPasswordEmailSent", (request, response)=>{
     response.sendFile(__dirname+"/public/html/forgotPasswordEmailSent.html");
@@ -115,6 +117,27 @@ app.post("/incrementInCart", incrementInCart);
 
 app.post("/decrementInCart", decrementInCart);
 
+app.post("/ajaxremove", (request, response)=>{
+    console.log(request.body);
+    userModel.updateOne({email:request.body.userEmail}, { $pull: { cart: { productName: request.body.productName } } })
+    .then((data)=>{
+        console.log(data);
+        response.send("status 200")
+    }).catch((err)=>{
+        console.log(err);
+        response.send("status 400");
+    })
+})
+
+app.post("/ajaxChangeCartQuantity", (request, response)=>{
+    console.log(request.body);
+    userModel.updateOne({email:request.body.userEmail, "cart.productName":request.body.productName}, { $set: { "cart.$.quantity" : request.body.count } })
+    .then((data)=>{
+        console.log(data);
+    }).catch((e)=>{
+        console.log(e);
+    })
+})
 
 
 app.get("/viewCart", viewCart);

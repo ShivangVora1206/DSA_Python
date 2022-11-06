@@ -18,7 +18,7 @@ module.exports = function (request, response){
         });
         let curCount = match[0].quantity;
         // console.log(cart[Index].quantity);
-        if(cart[Index].quantity===1){
+        if(cart[Index].quantity<=1){
             removeProductFromCartService(request.session.email, request.body.productName, response);
         }
         cart[Index].quantity = curCount-1;

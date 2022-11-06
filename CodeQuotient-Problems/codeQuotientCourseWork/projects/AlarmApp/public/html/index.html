@@ -1,0 +1,81 @@
+<head>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <h1>Alarm app</h1>
+    <!-- <form method="post" action="newAlarm"> -->
+        <label>Alarm year</label>
+        <input id="year" name="year" type="text">
+        <label>Alarm month</label>
+        <input id="month" name="month" type="text">
+        <label>Alarm day</label>
+        <input id="day" name="day" type="text">
+        <label>Alarm hours</label>
+        <input id="hours" name="hours" type="text">
+        <label>Alarm mins</label>
+        <input id="mins" name="mins" type="text">
+        <label>Alarm secs</label>
+        <input id="secs" name="secs" type="text">
+        <button id="button" value="<%= username %>" type="submit">Submit</button>
+    <!-- </form> -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+
+
+        // ADD CLIENT TO SERVER USERNAME HANDSHAKE ON PAGE LOAD
+
+        var socket = io();
+        socket.on("from-server", (res)=>{
+            console.log(res);
+            alert(res);
+            var div = document.createElement("div");
+            var p = document.createElement("p");
+            p.innerHTML = res;
+            div.appendChild(p);
+            document.body.appendChild(div);
+        })
+        var year = document.getElementById("year");
+        var month = document.getElementById("month");
+        var day = document.getElementById("day");
+        var hours = document.getElementById("hours");
+        var mins = document.getElementById("mins");
+        var secs = document.getElementById("secs");
+        var button = document.getElementById("button");
+        button.addEventListener("click", ()=>{
+            let body = {
+                year : year.value,
+                month : month.value,
+                day : day.value,
+                hours : hours.value,
+                mins : mins.value,
+                secs : secs.value,
+            }
+            let div = document.createElement("div");
+            let p = document.createElement("p");
+            p.innerHTML = year.value + " " + month.value + " " + day.value + " " + hours.value + " " + mins.value + " "+ secs.value;
+            div.appendChild(p);
+            document.body.appendChild(div);
+            socket.emit("from-client", input.value+"|"+button.value+"|"+JSON.stringify(body));
+            //ADD CLIENT TO SERVER ALARM DATA
+                
+            })
+        
+
+    //     async function subscribe() {
+    //     let sw = await navigator.serviceWorker.ready;
+    //     let push = await sw.pushManager.subscribe({
+    //       userVisibleOnly: true,
+    //       applicationServerKey:
+    //         'BLn-J7kvCBhce5dRyT6zG4JpSzs79MXX6DecPJQIv0ik2znb-1u4yHviWu2A2SDb2d3fQir42ZZxyqHaPZbwNUU'
+    //     });
+    //     console.log(JSON.stringify(push));
+    //   }
+
+    //   if ('serviceWorker' in navigator) {
+    //     addEventListener('load', async () => {
+    //       let sw = await navigator.serviceWorker.register('./sw.js');
+    //       console.log(sw);
+    //     });
+    //   }
+    </script>
+</body>

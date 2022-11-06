@@ -20,7 +20,15 @@ module.exports = function (request, response){
 
                     }else{
 
+                        response.redirect("/login");
+                    }
+                    if(request.body.role ===  user[0].role){
+
                         response.redirect("/");
+
+                    }else{
+
+                        response.redirect("/login");
                     }
                 }else{
                     response.redirect("/login");

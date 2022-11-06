@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>E-Commerce | Signup</title>
+        <link rel="stylesheet" href="../css/signup.css">
+    </head>
+    <body>
+        <div id="formdiv">
+            <h1>New Account</h1>
+            <form method="post" name="signupform" onsubmit="return validateForm()" action="signup">
+                <div id="usernamediv">
+                    <label>Email</label><br>
+                    <input type="email" name="email" id="email">
+                </div>
+                <div id="usernamediv">
+                    <label>Username</label><br>
+                    <input type="text" name="username">
+                </div>
+                <div id="passworddiv">
+                    <label>Password</label><br>
+                    <input type="password" name="password">
+                </div>
+                <input type="submit" id="submitbutton">
+            </form>
+            <a href="/login">login</a>
+        </div>
+        <script>
+            function validateForm() {
+                var email = document.forms["signupform"]["email"].value;
+                var name = document.forms["signupform"]["username"].value;
+                var password = document.forms["signupform"]["password"].value;
+                if (email && name && password) {
+                    return true;
+                }
+                else{
+                    alert("Name must be filled out");
+                    return false;
+                }
+                }
+
+        </script>
+    </body>
+</html>
