@@ -2,7 +2,11 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-    <h1>Alarm app</h1>
+    <nav>
+        <h4>Hello <%= username %></h4>
+        <img src="alder.png">
+        <form method="get" action="logout"><button id="log-out-button" value="<%= username %>" type="submit">Logout</button></form>
+    </nav>
     <div>
     <!-- <form method="post" action="newAlarm"> -->
         <label>Alarm Date</label>
@@ -24,12 +28,17 @@
     <div id="main"></div>
     <script src="/socket.io/socket.io.js"></script>
     <script>
+        var globalFlag = true;
         var mainDiv = document.getElementById("main");
         var button = document.getElementById("button");
+        var logoutbtn = document.getElementById("log-out-button");
         var socket = io();
         socket.on("alarm-from-server", (res)=>{
             console.log(res);
-            alert("ALARM IS RINGING!!");
+            if(globalFlag){
+
+                alert("ALARM IS RINGING!!");
+            }
         })
         socket.on("from-server", (res)=>{
             console.log(res);
@@ -59,9 +68,15 @@
                 hours : parseInt(hours),
                 mins : parseInt(mins),
             }
+            let curDate = new Date();
+            if(body.year < curDate.getFullYear() || body.month < curDate.getMonth() || body.day < curDate.getDate() || body.hours < curDate.getHours() || body.mins <= curDate.getMinutes()){
+                alert("Cannot set Alarm for time that has already passed");
+                return;
+            }
 
             socket.emit("from-client", button.value+"|"+JSON.stringify(body));
-            populatePage();
+            // setTimeout(populatePage, 500);
+            window.location.reload();
             })
 
         function populatePage() {
@@ -104,6 +119,25 @@
                     })
         }
 
+        let temp = setInterval(()=>{
+            let flag = false;
+            let cookie = document.cookie.split("; ");
+            cookie.forEach((value)=>{
+                if(value.split("=")[0] === "SessionID"){
+                    flag = true;
+                }
+            })
+
+            if(!flag){
+                globalFlag = false;
+                alert("Session Timed Out, Please Login again");
+                window.location.reload();
+                // socket.disconnect();
+            }
+            
+        }, 10000);
         
+
+
     </script>
 </body>

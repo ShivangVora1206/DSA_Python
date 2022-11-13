@@ -5,6 +5,7 @@ const userSchema = new Schema({
     email:String,
     username:String,
     password:String,
+    //store only ids 
     alarms:[{ year: String, month:String, day:String, hours: String, mins:String }]
 }
 );

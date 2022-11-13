@@ -1,0 +1,50 @@
+.container{
+    padding: 10px;
+    background-color: rgb(34, 44, 52);
+    margin: 5px;
+    margin-top: 12px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    max-width: 40%;
+    margin-right:60%;
+    overflow-wrap: break-word;
+    /* float: left; */
+
+}
+.containerme{
+    padding: 10px;
+    background-color: rgb(15, 61, 84);
+    margin: 5px;
+    margin-top: 12px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    color: rgb(255, 255, 255);
+    max-width: 40%;
+    margin-left: 60%;
+    overflow-wrap: break-word;
+    /* float: right; */
+
+}
+
+
+p{
+    font-size: 14px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin-top: 0;
+    margin-bottom: 0;
+    
+}
+.username{
+    color: rgb(0, 203, 243);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.time{
+    /* float: right; */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    font-size: 11px;
+    text-align: right;
+}

@@ -1,0 +1,65 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.navbar{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #202C33;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+.navbar img{
+    height: 40px;
+    width: 40px;
+    margin: 0;
+}
+.chatbody{
+    overflow-y: scroll;
+    background: url("../../../public/chat-bg-5.png") 50% 50% no-repeat;
+    background-size: cover;
+    /* background: rgb(2,0,36); */
+    /* background: linear-gradient(180deg, rgb(25, 24, 34) 27%, rgb(7, 44, 72) 100%); */
+    width: 100%;
+    height: 100vh;
+}
+.chatbody::-webkit-scrollbar{
+    display: none;
+}
+.messageInput{
+
+    width: 90%;
+    color: white;
+    padding: 10px;
+    background-color: #2b3840;
+    border-radius: 7px;
+    outline: none;
+    border-width: 0;
+}
+.messageInputDiv{
+    background-color: #1d2a32;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.heading-2-unread{
+    color:white;
+    margin: 0;
+    margin-left: 10px;
+    font-weight: 100;
+    font-size: 15px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; */
+}
+.profilename{
+    display: flex;
+    align-items: center;
+}

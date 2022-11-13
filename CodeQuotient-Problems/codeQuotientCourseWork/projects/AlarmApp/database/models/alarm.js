@@ -9,6 +9,7 @@ const alarmSchema = new Schema({
     mins:String,
     user:String,
     primaryKey:Number
+    //add time field and add indexing to that field of type date
 }
 );
 

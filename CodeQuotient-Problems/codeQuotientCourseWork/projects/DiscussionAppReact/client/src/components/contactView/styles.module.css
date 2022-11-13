@@ -1,0 +1,53 @@
+.container{
+    background-color: #111b21;
+    width: 30%;
+    min-width: 350px;
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+}
+.navbar{
+    display: flex;
+    /* position: fixed; */
+    /* width: 30%; */
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #202C33;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+}
+.navbar img{
+    height: 40px;
+    width: 40px;
+    margin: 0;
+}
+h1{
+    margin: 0;
+    color: white;
+}
+.searchField{
+    width: 92%;
+    
+    font-size: 13px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border-width: 0;
+    padding: 10px;
+    background-color: #202C33;
+    outline: none;
+    color: white;
+}
+.contacts-container{
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    /* overflow-x: hidden; */
+}
+.contacts-container::-webkit-scrollbar{
+    display:none;
+}

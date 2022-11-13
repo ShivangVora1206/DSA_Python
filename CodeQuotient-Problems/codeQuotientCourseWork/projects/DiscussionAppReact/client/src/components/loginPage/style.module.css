@@ -1,0 +1,12 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    height: 97vh;
+    
+}
+.card{
+    display: flex;
+    flex-direction: column;
+    
+}

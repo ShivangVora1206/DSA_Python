@@ -7,6 +7,15 @@ body{
     flex-direction: column;
     /* background-color: rgb(193, 193, 193); */
 }
+nav{
+    display: flex;
+    width: 100%;
+    margin-left: 20px;
+    margin-right: 20px;
+    /* padding: 10px; */
+    align-items: center;
+    justify-content: space-between;
+}
 label{
     color: white;
 }
@@ -27,7 +36,7 @@ button{
     padding: 6px;
 }
 button:hover{
-    background-color: black;
+    background-color: rgba(255, 0, 0, 0.807);
     color: white;
 }
 
@@ -51,16 +60,21 @@ button:hover{
     /* align-items: flex-start; */
     align-items: center;
     font-size: 30px;
-    transition: .3s;
+    transition: .5s;
 }
-
 
 .card:hover {
     /* color: #ffee10; */
-    box-shadow: 0 4px 8px 0 rgba(255, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 47, 255, 0.19);
+    /* filter: blur(0px); */
+    transition: .3s;
+    transform: scale(1.2);
+    box-shadow: 0 4px 8px 0 rgba(255, 0, 0, 0.4), 0 6px 20px 0 rgba(255, 94, 0, 0.553);
     text-shadow: 0 0 5px #ffffff;
 }
-
+img{
+    height: 70px;
+    width: 120px;
+}
 p{
     margin:0;
     font-size: medium;
@@ -89,4 +103,20 @@ h2{
 }
 h3{
     color: white;
+}
+h4{
+    color: white;
+    margin-left: 10px;
+    /* font-weight: 500; */
+    transition: 0.2s;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+h4:hover{
+    text-shadow: 0 0 15px #ffffff;
+    transition: 0.2s;
+    transform: scale(1.2);
+
+}
+#log-out-button{
+    margin-right: 10px;
 }

@@ -1,7 +1,8 @@
 const express = require("express");
-const session = require("express-session");
-const fs = require("fs");
+// const session = require("express-session");
 const startDb = require("./database/init");
+const cookieParser = require("cookie-parser");
+const fs = require("fs");
 const app = express();
 const postLogin = require("./controllers/postLogin");
 const postUserSignup = require("./controllers/postUserSignup");
@@ -10,6 +11,7 @@ const http = require('http');
 const server = http.createServer(app);
 const { Server } = require("socket.io");
 const userModel = require("./database/models/user");
+const getUserData = require("./services/user/getUserData");
 const io = new Server(server);
 
 startDb();
@@ -21,26 +23,48 @@ let usernameToSockId = {}
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({extended:true}))
-app.use(session({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: true,
-    cookie: { secure: false } 
-    }))
+app.use(cookieParser());
+// app.use(session({
+//     secret: 'keyboard cat',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: false } 
+//     }))
 
+let sessionStore = {}
+let sid = 0;
+
+function sessionize(req, res, next){
+    console.log(req.cookies);
+    if(req.cookies.SessionID === undefined){
+        // res.cookie("SessionID", sid);
+        res.cookie("SessionID", sid, {maxAge: 1800000});
+        sessionStore[sid] = {}
+        sid++;
+        res.redirect("/");
+    }
+    else{
+
+        next();
+    }
+} 
     
 app.set("view engine", "ejs");
 app.set("views", "./public/views");
 
 
-app.get("/", (req, res)=>{
-    if(!req.session.isLoggedIn){
+app.get("/", sessionize, (req, res)=>{
+    console.log(sessionStore);
+    if(!sessionStore[req.cookies.SessionID].isLoggedIn){
         res.redirect("/login");
     }else{
-            res.render("index", {username:req.session.username});
+            res.cookie("SessionID", req.cookies.SessionID, {maxAge: 1800000});
+            res.render("index", {username:sessionStore[req.cookies.SessionID].username});
+
             io.once("connection", (socket)=>{
             console.log("A new user connected", socket.id);
-            io.to(socket.id).emit("from-server", "To Id"+socket.id)
+            io.to(socket.id).emit("from-server", "To Id "+socket.id)
+
 
             socket.on("username-handshake", (sockRes)=>{
                 let uname = sockRes;
@@ -52,8 +76,10 @@ app.get("/", (req, res)=>{
                 }
             })
 
+            
             socket.on("disconnect", ()=>{
                 console.log("disconnected", socket.id);
+                // res.clearCookie("SessionID");
                 for(var uname in usernameToSockId) {
                     if(usernameToSockId.hasOwnProperty(uname) && usernameToSockId[uname] == socket.id) {
                         delete usernameToSockId[uname];
@@ -65,7 +91,7 @@ app.get("/", (req, res)=>{
                 console.log(sockRes);
                 let uname = JSON.parse(sockRes.split("|")[0]);
                 let alarm = JSON.parse(sockRes.split("|")[1]);
-                alarm.user = req.session.username;
+                alarm.user = sessionStore[req.cookies.SessionID].username;
                 alarm.primaryKey = parseInt(""+alarm.year+""+alarm.month+""+alarm.day+""+alarm.hours+""+alarm.mins+"");
                 console.log(alarm);
                 console.log(usernameToSockId);
@@ -73,7 +99,7 @@ app.get("/", (req, res)=>{
 
                 alarmModel.create(alarm).then((data)=>{
                     console.log(data);
-                    userModel.updateOne({username:req.session.username}, {$push: {alarms:alarm}})
+                    userModel.updateOne({username:sessionStore[req.cookies.SessionID].username}, {$push: {alarms:alarm}})
                     .then((data)=>{
                         console.log(data);
                     }).catch((e)=>{
@@ -130,6 +156,7 @@ let minuteIntervalId = setInterval(()=>{
     let curmins = ""+date.getMinutes();
     console.log({year:curyear, month:curmonth, day:curday, hours:curhours, mins:curmins});
     let primaryKey = parseInt(curyear+curmonth+curday+curhours+curmins);
+    //add a global flag to check id a req is already sent
     alarmModel.find({primaryKey:primaryKey}, {user:1})
     .then((data)=>{
         let usernames = data.map((value)=>{
@@ -141,6 +168,7 @@ let minuteIntervalId = setInterval(()=>{
             console.log("Alert Alarm!");
             usernames.forEach((uname)=>{
                 io.to(usernameToSockId[uname]).emit("alarm-from-server", "Alarm Alert");
+                //send all the alarm info
             })
         }
     }).catch((e)=>{
@@ -151,16 +179,42 @@ let minuteIntervalId = setInterval(()=>{
 
 
 
-app.get("/login", (req, res)=>{
+app.get("/login", sessionize, (req, res)=>{
     res.sendFile(__dirname+"/public/html/login.html")
 })
-app.post("/login", postLogin);
+app.get("/logout", sessionize, (req, res)=>{
+    res.clearCookie("SessionID");
+    res.redirect("/login");
+})
+app.post("/login", sessionize, (req, res)=>{
+    getUserData(req.body, (err, data)=>{
+        if(err){
+            console.log("Error Logging In");
+            res.redirect("/login");
+        }else{
+
+            let user = data;
+            console.log(user);
+            if(user.length){
+                if(user[0]){
+                    sessionStore[req.cookies.SessionID].email = user[0].email;
+                    sessionStore[req.cookies.SessionID].username = user[0].username;
+                    sessionStore[req.cookies.SessionID].isLoggedIn = true;
+                    console.log("sessionStore", sessionStore);
+
+                        res.redirect("/");
+
+                    }
+                }
+        }
+    }
+)});
 
 
-app.get("/signup", (req, res)=>{
+app.get("/signup", sessionize, (req, res)=>{
     res.sendFile(__dirname+"/public/html/signup.html")
 })
-app.post("/signup", postUserSignup);
+app.post("/signup", sessionize, postUserSignup);
 
 // app.get("/setAlarm", (req, res)=>{
 //     console.log(req.query);
@@ -170,7 +224,7 @@ app.post("/signup", postUserSignup);
 //     res.redirect("/");
 // })
 
-app.post("/getAlarms", (req, res)=>{
+app.post("/getAlarms", sessionize, (req, res)=>{
     alarmModel.find({user:req.body.username})
     .then((data)=>{
         res.json(data);
@@ -179,8 +233,9 @@ app.post("/getAlarms", (req, res)=>{
     })
 })
 
-app.post("/deleteAlarm", (req, res)=>{
+app.post("/deleteAlarm", sessionize, (req, res)=>{
     console.log(req.body);
+    //never delete data instead add active and inactive field
     alarmModel.deleteOne({user:req.body.username, primaryKey:req.body.primaryKey})
     .then((data)=>{
         console.log(data);
@@ -205,7 +260,7 @@ app.post("/deleteAlarm", (req, res)=>{
 //             }else{
 //                 usernameToSockId.uname.push(socket.id);
 //             }
-//             let key = alarm.mins+alarm.secs+req.session.username;
+//             let key = alarm.mins+alarm.secs+sessionStore[req.cookies.SessionID].username;
 //             map[key] = {}
 //             // map[key].interval = setInterval(()=>{
 //             //     let date = new Date();
