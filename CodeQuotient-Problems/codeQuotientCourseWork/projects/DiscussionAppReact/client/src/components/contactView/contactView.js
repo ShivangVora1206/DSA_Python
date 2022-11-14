@@ -69,11 +69,12 @@ const data = [
 
 export default function ContactView(props) {
     const [contacts, setContacts] = useState([]);
+    const [userProfile, setUserProfile] = useState("http://127.0.0.1:8000/default-profile-1.jpg");
     const url = "http://127.0.0.1:8000/getcontacts";
     const options = {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username: "user1" })
+    body: JSON.stringify({ username: props.username })
     };
     useEffect(() => {
         const getData = async () => {
@@ -88,6 +89,27 @@ export default function ContactView(props) {
         }
         getData()
     }, []);
+    useEffect(() => {
+        const Url = "http://127.0.0.1:8000/getUserProfile";
+        const Options = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username: props.username })
+        };
+        const getData = async () => {
+            try {
+            const response = await fetch(Url, Options);
+            const data = await response.json();
+            console.log("profile", data);
+            setUserProfile("http://127.0.0.1:8000/"+data.profile);
+        } catch (e) {
+            console.log(e);
+        }
+        }
+        getData()
+    }, []);
+
+    
 
     function changePreview(e, gid, gname){
         // console.log("groupnamesss", gname);
@@ -101,7 +123,7 @@ export default function ContactView(props) {
     return (
         <div className={styles.container}>
             <nav className={styles.navbar}>
-                <img src="logo192.png"></img>
+                <img src={userProfile}></img>
                 <h1>:</h1>
             </nav>
             <input className={styles.searchField} placeholder="Search or start a new chat"></input>

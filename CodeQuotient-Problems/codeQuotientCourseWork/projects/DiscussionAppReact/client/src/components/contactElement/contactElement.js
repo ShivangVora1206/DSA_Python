@@ -10,7 +10,7 @@ export default function ContactElement(props) {
     return (
         <div onClick={handleClick} className={styles.container}>
             <div className={styles.innerDiv}>
-            <img className={styles.profile} src="logo512.png"/>
+            <img className={styles.profile} src="http://localhost:8000/default-profile-1.jpg"/>
             {read === "0" ? (<>
             <div className={styles.nameandlast}>
                 <h2 className={styles["heading2-unread"]}>{props.contactName}</h2>
