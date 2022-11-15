@@ -216,7 +216,7 @@ export default function ChatPreview(props) {
         <div className={styles.container}>
             <nav className={styles.navbar}>
                 <div className={styles.profilename}>
-                <img src="http://127.0.0.1:8000/default-profile-1.jpg"/>
+                <img src={"http://127.0.0.1:8000/"+props.groupprofile}/>
                 <h2 className={styles["heading-2-unread"]}>{props.groupname}</h2>
                 </div>
             </nav>

@@ -51,6 +51,11 @@ io.on("connection", socket => {
         let group = JSON.parse(m).groupid;
         console.log(group);
         socket.broadcast.to(group).emit("new-chat-from-server", m);
+        groupModel.findByIdAndUpdate({_id:group}, {status:"1"}).then((data)=>{
+            console.log("uupdate log",data);
+        }).catch((e)=>{
+            console.log(e);
+        })
     })
 
     socket.on("join", m =>{

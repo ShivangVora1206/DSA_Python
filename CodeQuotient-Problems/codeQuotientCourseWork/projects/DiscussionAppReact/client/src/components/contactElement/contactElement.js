@@ -3,14 +3,14 @@ import styles from "./styles.module.css"
 export default function ContactElement(props) {
     const [read, setRead] = useState(props.read);
     function handleClick(e) {
-        props.onClick(props.contactName, props.groupid, props.groupName);
+        props.onClick(props.contactName, props.groupid, props.groupName, props.groupProfile);
         setRead(1);
         console.log("read set");
     }
     return (
         <div onClick={handleClick} className={styles.container}>
             <div className={styles.innerDiv}>
-            <img className={styles.profile} src="http://localhost:8000/default-profile-1.jpg"/>
+            <img className={styles.profile} src={"http://localhost:8000/"+props.groupProfile}/>
             {read === "0" ? (<>
             <div className={styles.nameandlast}>
                 <h2 className={styles["heading2-unread"]}>{props.contactName}</h2>

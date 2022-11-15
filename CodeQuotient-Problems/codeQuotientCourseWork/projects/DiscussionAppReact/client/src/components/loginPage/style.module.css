@@ -3,8 +3,12 @@
     justify-content: center;
     align-content: center;
     align-items: center;
-    height: 97vh;
-    background-color: rgb(40, 42, 46);
+    height: 100vh;
+    margin-top: -15px;
+    margin-bottom: -15px;
+    /* background-color: rgb(40, 42, 46); */
+    background: linear-gradient(270deg, rgb(26, 35, 54) 20%, rgba(9,94,121,1) 80%);;
+
 }
 .card{
     padding: 20px;

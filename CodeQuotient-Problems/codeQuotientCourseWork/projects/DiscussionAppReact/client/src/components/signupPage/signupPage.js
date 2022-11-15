@@ -28,6 +28,10 @@ export default function SignUpPage(props) {
 
     function signUp(e) {
         e.preventDefault();
+        if(username === "" || password === "" || email === "" || phone === "" || file === undefined){
+            alert("Please Fill All fields")
+            return
+        }
         const url = 'http://localhost:8000/signup';
         const formData = new FormData();
         formData.append('file', file);
@@ -81,7 +85,7 @@ export default function SignUpPage(props) {
                 <input type="file" name="profile" onChange={changeFile} className={styles.input}></input>
             </div>
             
-            <button type="submit" className={styles.button}>Login</button>
+            <button type="submit" className={styles.button}>Signup</button>
             </form>
             <p className={styles.bottomtext}>already have an account ? <a href="/login">Login</a></p>
         </div>

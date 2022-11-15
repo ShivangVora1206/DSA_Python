@@ -35,7 +35,11 @@ export default function LoginPage(props) {
             console.log(data);
             if(data.status === 200){
                 props.setUsername(username);
-                navigate("/");
+                // navigate("/app");
+                props.setFlag(true);
+                console.log("before local");
+                localStorage.setItem("token", username);
+                navigate("/")
             }else{
                 
                 navigate("/login");
