@@ -11,6 +11,7 @@ const userModel = require("./database/userModel");
 const cookieParser = require("cookie-parser");
 const groupModel = require("./database/groupModel");
 const conversationModel = require("./database/conversationModel");
+const e = require("express");
 const server = http.createServer(app);
 const io = new Server(server,{
     cors:{origin:"http://127.0.0.1:3000", methods:["GET", "POST"],
@@ -80,6 +81,7 @@ app.post("/addUser", async (req, res)=>{
         console.log(data);
         let data2 = await userDataModel.create({
             email:req.body.email,
+            username:req.body.username,
             profilepic:req.body.profile,
             phone:req.body.phone,
             userid:data._id
@@ -106,16 +108,36 @@ app.post("/addgroup", async (req, res)=>{
     res.redirect("/addgroup");
 })
 
-app.post("/getcontacts", async (req, res)=>{
-    let data = await groupModel.find({participants:req.body.username});
+app.post("/getcontacts", async (req, res) => {
+    let data = await groupModel.find({ participants: req.body.username });
     console.log(data);
     res.json(data);
+});
+
+app.post("/getUserContacts", async (req, res) => {
+	let userData = await userDataModel.find({
+		username: { $ne: req.body.username },
+	});
+	console.log(userData);
+	res.json(userData);
+});  
+
+app.post("/addUserToGroup", async (req, res)=>{
+    console.log(req.body);
+    let already =  await groupModel.find({participants:req.body.username});
+    if(already.length !== 0){
+        let data = await groupModel.findByIdAndUpdate({_id:req.body.groupid}, {$push:{participants:req.body.username}})
+            console.log(data);
+            res.json(data);
+    }else{
+        res.json({message:"Already in group"});
+    }
 })
 
 app.post("/addconversation", async (req, res)=>{
     
     // let timestamp = moment().format("YYYY-MM-DD HH:mm:ss")
-    console.log(moment().utc(true));
+    // console.log(moment().utc(true));
 
     console.log(req.body);
     let data = await conversationModel.create({
@@ -130,8 +152,9 @@ app.post("/addconversation", async (req, res)=>{
 })
 
 app.post("/getconversation", async (req, res)=>{
+    console.log("query",req.query);
     console.log(req.body);
-    let data = await conversationModel.find({groupid:req.body.groupid});
+    let data = await conversationModel.find({groupid:req.body.groupid,timestamp:{$lte:new Date(req.body.date)}}).sort({ timestamp: -1 }).limit(10).skip(parseInt(req.query.count));
     console.log("getconvo",data);
     res.json(data);
 })

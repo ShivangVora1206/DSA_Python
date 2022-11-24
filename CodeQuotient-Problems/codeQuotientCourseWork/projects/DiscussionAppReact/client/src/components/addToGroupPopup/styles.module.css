@@ -1,0 +1,60 @@
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 100;
+    position: absolute;
+    height: 100vh;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* transition: .5s; */
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.card{
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: rgb(14, 25, 33);
+    height: 400px;
+    min-width: 350px;
+}
+h1{
+    margin: 0;
+    color: white;
+    font-size: medium;
+    font-weight: 100;
+}
+.searchField{
+    width: 92%;
+    font-size: 13px;
+    margin-top: 8px;
+    border-radius: 5px;
+    border-width: 0;
+    padding: 10px;
+    background-color: #202C33;
+    outline: none;
+    color: white;
+}
+.contacts-container{
+    height: 100%;
+    width: 100%;
+    overflow-y: scroll;
+    /* overflow-x: hidden; */
+}
+.contacts-container::-webkit-scrollbar{
+    display:none;
+}
+.exitbutton{
+    /* position: absolute; */
+    border-radius: 50px;
+    padding: 5px;
+    border-width: 0;
+    background-color: aliceblue;
+}
+.nav{
+    display: flex;
+    justify-content: space-between;
+}

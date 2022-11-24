@@ -5,7 +5,8 @@ const userDataSchema = new Schema({
     email:String,
     userid:String,
     phone:String,
-    profilepic:String
+    profilepic:String,
+    username:String
 
 }
 );

@@ -6,6 +6,7 @@ import io from "socket.io-client";
 import {BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import LoginPage from './components/loginPage/loginPage';
 import SignUpPage from './components/signupPage/signupPage';
+import AddToGroupPopup from './components/addToGroupPopup/addToGroupPopup';
 const socket = io.connect("http://127.0.0.1:8000");
 socket.on("from-server", m =>{
   console.log(m);
@@ -18,6 +19,7 @@ function App(props) {
   const [groupprofile, setgroupProfile] = useState("default-profile-1.png");
   const [username, setUsername] = useState("");
   const [flag, setFlag] = useState(false);
+  const [addToGroupPopup, setAddToGroupPopup] = useState(false);
 
 useEffect(()=>{
   const token = localStorage.getItem("token");
@@ -36,7 +38,8 @@ useEffect(()=>{
       <Route path="/" element={
         flag ? (<div className={styles.container}>
       <ContactView setPreviewState={setShowDefault} username={username} groupname={groupname} setgroupName={setgroupName} setgroupProfile={setgroupProfile} groupid={groupid} setGroupId={setgroupId} socket={socket}/>
-      <ChatView username={username} groupid={groupid} groupname={groupname} groupprofile={groupprofile} setgroupName={setgroupName} setGroupId={setgroupId} showDefault={showDefault} socket={socket}/>
+      <ChatView username={username} setAddToGroupPopup={setAddToGroupPopup} groupid={groupid} groupname={groupname} groupprofile={groupprofile} setgroupName={setgroupName} setGroupId={setgroupId} showDefault={showDefault} socket={socket}/>
+      <AddToGroupPopup username={username} groupid={groupid} setAddToGroupPopup={setAddToGroupPopup} onFlag={addToGroupPopup}/>
       </div>) : (<LoginPage setFlag={setFlag} setUsername={setUsername}/>)
       } />
       

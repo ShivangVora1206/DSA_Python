@@ -8,7 +8,7 @@
     /* background-color: rgb(17, 38, 52); */
     background-color: #202C33;
     border-radius: 10px;
-    padding: 5px;
+    padding: 8px;
     max-width: 95%;
     margin-bottom: 10px;
     transition: .3s;
@@ -77,10 +77,6 @@ ul{
     margin-right: 10px;
     width: 160%;
 } 
-.text-read{
-
-    margin-left: 20%;
-}
-.text-unread{
-    margin-left: 20%;
+h2{
+    margin: 0;
 }

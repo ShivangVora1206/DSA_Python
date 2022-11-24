@@ -40,6 +40,7 @@ export default function SignUpPage(props) {
         formData.append("password", password);
         formData.append("email", email);
         formData.append("phone", phone);
+        console.log("formdata", formData);
         const config = {
             headers: {
                 'content-type': 'multipart/form-data',

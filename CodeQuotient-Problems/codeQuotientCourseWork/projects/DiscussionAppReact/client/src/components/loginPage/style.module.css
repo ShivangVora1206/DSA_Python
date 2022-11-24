@@ -61,8 +61,13 @@ h1{
     border-radius: 10px;
     padding: 13px;
     width: 90px;
-
+    /* transition: .3s; */
 }
+/* .button:hover{
+    transition: .3s;
+    background: linear-gradient(270deg, rgb(0, 44, 87) 31%, rgba(9,94,121,1) 79%);;
+    
+} */
 .bottomtext{
     color: white;
 }

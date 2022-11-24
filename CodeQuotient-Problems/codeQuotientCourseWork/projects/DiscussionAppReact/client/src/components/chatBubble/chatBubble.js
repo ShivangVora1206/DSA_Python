@@ -2,7 +2,7 @@ import styles from "./styles.module.css"
 
 export default function ChatBubble(props) {
     let time = props.time;
-    console.log(time);
+    // console.log(time);
     if(time[17] === ":"){
 
         time = time.slice(11, 17);

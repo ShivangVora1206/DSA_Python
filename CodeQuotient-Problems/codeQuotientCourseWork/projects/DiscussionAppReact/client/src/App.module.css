@@ -3,7 +3,9 @@
   flex-direction: row;
   height: 97vh;
   width: 100%;
+  transition: .3s;
 }
+
 body{
   background-color: #111b21;
   padding: 0px;

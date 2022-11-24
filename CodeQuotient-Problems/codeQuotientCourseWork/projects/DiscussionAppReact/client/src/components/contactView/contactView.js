@@ -72,6 +72,9 @@ const data = [
 export default function ContactView(props) {
     const navigate = useNavigate();
     const [contacts, setContacts] = useState([]);
+    const [virtualContacts, setVirtualContacts] = useState([]);
+    const [search, setSearch] = useState("");
+    console.log(search);
     const [userProfile, setUserProfile] = useState("http://127.0.0.1:8000/default-profile-1.jpg");
     const url = "http://127.0.0.1:8000/getcontacts";
     const options = {
@@ -85,13 +88,20 @@ export default function ContactView(props) {
             const response = await fetch(url, options);
             const data = await response.json();
             console.log(data);
-            setContacts(data)
+            setVirtualContacts(data);
         } catch (e) {
             console.log(e);
         }
         }
         getData()
     }, []);
+
+
+    useEffect(() => {
+        setContacts(virtualContacts);
+    }, [virtualContacts]);
+
+
     useEffect(() => {
         const Url = "http://127.0.0.1:8000/getUserProfile";
         const Options = {
@@ -118,6 +128,20 @@ export default function ContactView(props) {
         navigate("/login");
     }
 
+    function changeSearch(e) {
+        setSearch(e.target.value);
+        let temp = [];
+        for (let i = 0; i < virtualContacts.length; i++) {
+        if (virtualContacts[i].name.toLowerCase().includes(e.target.value.toLowerCase())) {
+            temp.push(virtualContacts[i]);
+        }
+        }
+        console.log(temp);
+        setContacts(temp);
+
+
+    }
+
     function changePreview(e, gid, gname, gpro){
         // console.log("groupnamesss", gname);
         props.setPreviewState(() => false);
@@ -134,11 +158,10 @@ export default function ContactView(props) {
                 <img src={userProfile}></img>
                 <FontAwesomeIcon onClick={Logout} icon={faSquareArrowUpRight} style={{color:"white"}} />
             </nav>
-            <input className={styles.searchField} placeholder="Search or start a new chat"></input>
+            <input className={styles.searchField} onChange={changeSearch} value={search} placeholder="Search or start a new chat"></input>
             <div className={styles["contacts-container"]}>
                 <ul>
                     {contacts.map((value)=>{
-                        console.log(value);
                     return <ContactElement onClick={changePreview} read={value.status} groupProfile={value.profile} groupName={value.name} groupid={value._id} contactName={value.name} lastMessage={"last recieved Message"} time={"12:08"}/>
                     })}
                     

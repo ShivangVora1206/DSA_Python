@@ -3,6 +3,9 @@ import { Socket } from "socket.io-client";
 import ChatBubble from "../chatBubble/chatBubble"
 import styles from "./styles.module.css"
 import moment from "moment"
+import InfiniteScroll from 'react-infinite-scroller';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 let data = [
     {
         id : "id",
@@ -106,39 +109,66 @@ export default function ChatPreview(props) {
     const messageEl = useRef(null);
     const [messageInput, setMessageInput] = useState("");
     const [chatsArray, setChatsArray] = useState([]);
+    const [pagenum, setPagenum] = useState(0);
+    const [hasMore, setHasMore] = useState(true);
     console.log("gname", props.groupname);
-    // console.log(chatsArray);
-    const url = "http://127.0.0.1:8000/getconversation";
+    console.log("page",pagenum, hasMore);
+    const url = `http://127.0.0.1:8000/getconversation/?count=${pagenum}`;
+    let today = new Date();
+    let dateTime = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+1);
     const options = {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ groupid : props.groupid })
+        body: JSON.stringify({ groupid : props.groupid,date:dateTime }),
     };
-
+    
+    // window.onload = function(){
+    //     window.scrollTo(0, (document.body.offsetHeight-window.innerHeight)/1.5); // (X,Y)
+    //   }
 
     useEffect(() => {
         if (messageEl) {
         messageEl.current.addEventListener('DOMNodeInserted', event => {
             const { currentTarget: target } = event;
+            
             target.scroll({ top: target.scrollHeight, behavior: 'smooth' });
         });
-        }
-    }, [])
+    }
+}, [])
 
 
-    useEffect(() => {
-        const getData = async () => {
-            try {
+useEffect(() => {
+    
+    
+    const getData = async () => {
+        
+        try {
+
+            const url = `http://127.0.0.1:8000/getconversation/?count=${pagenum}`;
             const response = await fetch(url, options);
             const data = await response.json();
             console.log("converations", data);
-            setChatsArray(data);
+            // data = data.reverse()
+            setChatsArray(data.reverse());
+            // setChatsArray(data);
+            // setPagenum(0);
         } catch (e) {
             console.log(e)
         }
         }
+        
         getData()
+
+        return () =>{
+            console.log("unmounting")
+            setPagenum(0);
+            setHasMore(true);
+            setChatsArray([]);
+        }
+
+
     }, [props.groupid]);
+
 
     useEffect(()=>{
 
@@ -200,6 +230,7 @@ export default function ChatPreview(props) {
     // console.log(messageInput);
 
     function changeInputVal(e){
+        
         setMessageInput(e.target.value);
     }
 
@@ -212,6 +243,24 @@ export default function ChatPreview(props) {
         }
     }
 
+        const loadFunc = async () => {
+        
+            try {
+            const response = await fetch(url, options);
+            const data = await response.json();
+            console.log("converations", data);
+            let temp = chatsArray;
+            temp = data.reverse().concat(temp);
+            if(!data.length){
+                setHasMore(false);
+            }
+            setChatsArray(temp);
+            setPagenum(pagenum + 10);
+        } catch (e) {
+            console.log(e)
+        }
+        }
+
     return (
         <div className={styles.container}>
             <nav className={styles.navbar}>
@@ -219,8 +268,18 @@ export default function ChatPreview(props) {
                 <img src={"http://127.0.0.1:8000/"+props.groupprofile}/>
                 <h2 className={styles["heading-2-unread"]}>{props.groupname}</h2>
                 </div>
+                <FontAwesomeIcon onClick={() => {props.setAddToGroupPopup(true)}} icon={faBars} style={{color:"white"}} />
+
             </nav>
             <div className={styles.chatbody} ref={messageEl}>
+            <InfiniteScroll
+                pageStart={0}
+                loadMore={loadFunc}
+                hasMore={hasMore}
+                loader={<div className="loader" key={0}>Loading ...</div>}
+                useWindow={false}
+                isReverse={true}
+            >
                 <ul>
                     {
                         chatsArray.map((value)=>{
@@ -232,8 +291,10 @@ export default function ChatPreview(props) {
                         })
                     }
                 </ul>
+                </InfiniteScroll>
             </div>
             <div className={styles.messageInputDiv}>
+                
                 <input onKeyUp={onKeyUpHandler} onChange={changeInputVal} value={messageInput} className={styles.messageInput} placeholder="Type a message"></input>
             </div>
         </div>
